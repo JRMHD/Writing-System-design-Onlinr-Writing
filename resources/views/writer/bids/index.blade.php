@@ -2,10 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Writer Dashboard</h1>
-        <p>Welcome, {{ Auth::user()->name }}!</p>
-
-        <h2>Your Bids</h2>
+        <h1>Your Bids</h1>
         @if ($bids->isEmpty())
             <p>You have not placed any bids yet.</p>
         @else
@@ -28,7 +25,5 @@
                 </tbody>
             </table>
         @endif
-
-        <a href="{{ route('writer.bids.create') }}" class="btn btn-primary mt-3">Place a New Bid</a>
     </div>
 @endsection

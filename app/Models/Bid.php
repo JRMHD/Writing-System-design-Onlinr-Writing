@@ -9,13 +9,7 @@ class Bid extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'assignment_id',
-        'writer_id',
-        'amount',
-        'proposal',
-        'status',
-    ];
+    protected $fillable = ['assignment_id', 'writer_id', 'bid_amount', 'message'];
 
     public function assignment()
     {
@@ -24,6 +18,6 @@ class Bid extends Model
 
     public function writer()
     {
-        return $this->belongsTo(Writer::class);
+        return $this->belongsTo(User::class, 'writer_id');
     }
 }

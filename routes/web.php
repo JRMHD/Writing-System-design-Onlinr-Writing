@@ -4,10 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmployerAuthController;
 use App\Http\Controllers\Auth\WriterAuthController;
-use App\Http\Controllers\EmployerDashboardController;
+use App\Http\Controllers\Employer\AssignmentController;
 use App\Http\Controllers\WriterDashboardController;
-use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\BidController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +36,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-
 // Employer Authentication Routes
 Route::get('employer/login', [EmployerAuthController::class, 'showLoginForm'])->name('employer.login');
 Route::post('employer/login', [EmployerAuthController::class, 'login']);
@@ -51,33 +50,26 @@ Route::get('writer/register', [WriterAuthController::class, 'showRegistrationFor
 Route::post('writer/register', [WriterAuthController::class, 'register']);
 Route::post('writer/logout', [WriterAuthController::class, 'logout'])->name('writer.logout');
 
-// Dashboard Routes
+// Middleware for authenticated employers
 Route::middleware(['auth:employer'])->group(function () {
     Route::get('employer/dashboard', function () {
-        return view('employer.dashboard'); // Adjust this to your dashboard view
+        $assignments = \App\Models\Assignment::where('employer_id', Auth::id())->get();
+        return view('employer.assignments.dashboard', compact('assignments'));
     })->name('employer.dashboard');
+
+    Route::prefix('employer')->name('employer.')->group(function () {
+        Route::resource('assignments', AssignmentController::class)->except(['show']);
+    });
+
+    Route::get('employer/assignments/{assignmentId}/bids', [BidController::class, 'index'])->name('employer.assignments.bids.index');
+    Route::post('employer/assignments/{assignmentId}/select-writer', [BidController::class, 'selectWriter'])->name('employer.assignments.selectWriter');
 });
 
+// Middleware for authenticated writers
 Route::middleware(['auth:writer'])->group(function () {
-    Route::get('writer/dashboard', function () {
-        return view('writer.dashboard'); // Adjust this to your dashboard view
-    })->name('writer.dashboard');
-});
-
-
-
-// Employer Dashboard Routes
-Route::group(['middleware' => ['auth:employer']], function () {
-    Route::get('employer/dashboard', [EmployerDashboardController::class, 'index'])->name('employer.dashboard');
-    Route::get('employer/assignment/create', [EmployerDashboardController::class, 'createAssignment'])->name('employer.assignment.create');
-    Route::post('employer/assignment/store', [EmployerDashboardController::class, 'storeAssignment'])->name('employer.assignment.store');
-    Route::get('employer/assignment/{assignment}', [EmployerDashboardController::class, 'showAssignment'])->name('employer.assignment.show');
-});
-
-
-// Writer Dashboard Routes
-Route::group(['middleware' => ['auth:writer']], function () {
     Route::get('writer/dashboard', [WriterDashboardController::class, 'index'])->name('writer.dashboard');
-    Route::get('writer/assignment/{assignment}', [WriterDashboardController::class, 'showAssignment'])->name('writer.assignment.show');
-    Route::post('writer/assignment/{assignment}/bid', [WriterDashboardController::class, 'storeBid'])->name('writer.assignment.bid');
+
+    Route::get('writer/bids', [BidController::class, 'writerIndex'])->name('writer.bids.index');
+    Route::get('writer/bids/create', [BidController::class, 'create'])->name('writer.bids.create');
+    Route::post('writer/bids', [BidController::class, 'store'])->name('writer.bids.store');
 });

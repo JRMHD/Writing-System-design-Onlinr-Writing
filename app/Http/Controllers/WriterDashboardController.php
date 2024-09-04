@@ -2,43 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
-use App\Models\Bid;
 use Illuminate\Http\Request;
+use App\Models\Bid;
 use Illuminate\Support\Facades\Auth;
 
 class WriterDashboardController extends Controller
 {
-    // Show Writer Dashboard
     public function index()
     {
-        $assignments = Assignment::where('status', 'open')->get();
-        return view('writer.dashboard', compact('assignments'));
-    }
+        // Fetch all bids for the authenticated writer
+        $bids = Bid::where('writer_id', Auth::id())->get();
 
-    // Show Assignment Details
-    public function showAssignment(Assignment $assignment)
-    {
-        return view('writer.show-assignment', compact('assignment'));
-    }
-
-    // Store Bid
-    public function storeBid(Request $request, Assignment $assignment)
-    {
-        $request->validate([
-            'amount' => 'required|numeric',
-            'proposal' => 'required|string',
-        ]);
-
-        $writer = Auth::guard('writer')->user();
-
-        Bid::create([
-            'assignment_id' => $assignment->id,
-            'writer_id' => $writer->id,
-            'amount' => $request->amount,
-            'proposal' => $request->proposal,
-        ]);
-
-        return redirect()->route('writer.dashboard')->with('success', 'Bid submitted successfully.');
+        return view('writer.dashboard', compact('bids'));
     }
 }

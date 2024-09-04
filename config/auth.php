@@ -3,8 +3,8 @@
 return [
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'web', // Default guard to use
+        'passwords' => 'users', // Default password reset settings
     ],
 
     'guards' => [

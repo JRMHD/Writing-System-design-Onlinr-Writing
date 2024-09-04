@@ -14,13 +14,15 @@ class Assignment extends Model
         'title',
         'description',
         'word_count',
-        'budget',
         'deadline',
-        'status',
+        'budget',
     ];
 
+    // Relationship with Employer model (if you have one)
     public function employer()
     {
-        return $this->belongsTo(Employer::class);
+        return $this->belongsTo(User::class, 'employer_id');
     }
+
+    // Add additional relationships or methods if necessary
 }
