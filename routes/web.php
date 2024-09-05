@@ -8,6 +8,8 @@ use App\Http\Controllers\Employer\AssignmentController;
 use App\Http\Controllers\WriterDashboardController;
 use App\Http\Controllers\BidController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\WriterProfileController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------

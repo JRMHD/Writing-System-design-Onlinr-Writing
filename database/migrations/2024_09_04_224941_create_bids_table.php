@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assignment_id')->constrained()->onDelete('cascade');
-            $table->foreignId('writer_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('bid_amount', 8, 2);
-            $table->text('message')->nullable();
+            $table->foreignId('writer_id')->constrained('writers')->onDelete('cascade'); // References 'writers' table
+            $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // References 'assignments' table
+            $table->decimal('amount', 8, 2); // Make sure the column name is 'amount'
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

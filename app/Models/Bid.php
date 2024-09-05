@@ -18,6 +18,6 @@ class Bid extends Model
 
     public function writer()
     {
-        return $this->belongsTo(User::class, 'writer_id');
+        return $this->belongsTo(Writer::class, 'writer_id');
     }
 }
