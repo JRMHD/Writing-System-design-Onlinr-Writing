@@ -1,38 +1,36 @@
 @extends('layouts.writer')
 
-@section('content')
-    <div class="container" style="padding: 2rem; max-width: 900px; margin: auto;">
-        <h1 style="color: var(--deep-orange); font-size: 2rem; margin-bottom: 1.5rem;">Your Bids</h1>
+@section('title', 'My Bids')
 
-        @if ($bids->isEmpty())
-            <p style="color: var(--medium-gray); font-size: 1rem;">You have not placed any bids yet.</p>
-        @else
-            <table class="table"
-                style="width: 100%; border-collapse: collapse; background-color: var(--white); border-radius: 0.5rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                <thead>
-                    <tr style="background-color: var(--light-gray); color: var(--dark-gray);">
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--deep-orange);">Assignment
-                            Title</th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--deep-orange);">Bid Amount
-                        </th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--deep-orange);">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($bids as $bid)
-                        <tr>
-                            <td style="padding: 1rem; border-bottom: 1px solid var(--light-gray);">
-                                {{ $bid->assignment->title }}</td>
-                            <td
-                                style="padding: 1rem; border-bottom: 1px solid var(--light-gray); color: var(--royal-blue); font-weight: 600;">
-                                ${{ $bid->amount }}</td>
-                            <td
-                                style="padding: 1rem; border-bottom: 1px solid var(--light-gray); color: {{ $bid->status === 'pending' ? 'red' : ($bid->status === 'selected' ? 'green' : 'var(--deep-orange)') }}; font-weight: 600;">
-                                {{ ucfirst($bid->status) }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endif
+@section('content')
+    <div style="max-width: 1200px; margin: auto; padding: 2rem;">
+        <h1 style="font-size: 2.5rem; font-weight: bold; color: #333; margin-bottom: 2rem;">My Bids</h1>
+
+        @foreach ($bids as $bid)
+            <div
+                style="background-color: #fff; border: 1px solid #e1e1e1; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <h2 style="font-size: 1.75rem; font-weight: 600; color: #333; margin-bottom: 1rem;">
+                    {{ $bid->assignment->title }}</h2>
+                <p style="color: #555; margin-bottom: 0.75rem;"><strong>Bid Amount:</strong>
+                    ${{ number_format($bid->amount, 2) }}</p>
+                <p style="color: #555; margin-bottom: 0.75rem;"><strong>Submitted:</strong>
+                    {{ $bid->created_at->format('M d, Y H:i') }}</p>
+                <p style="margin-bottom: 1rem; font-weight: 600;">
+                    <strong>Status:</strong>
+                    @if ($bid->status === 'accepted')
+                        <span style="color: #28a745;">Accepted</span> <!-- Green for accepted -->
+                    @elseif ($bid->status === 'rejected')
+                        <span style="color: #dc3545;">Rejected</span> <!-- Red for rejected -->
+                    @elseif ($bid->status === 'pending')
+                        <span style="color: #ffc107;">Pending</span> <!-- Yellow for pending -->
+                    @else
+                        <span style="color: #6c757d;">In-progress</span> <!-- Gray for unknown -->
+                    @endif
+                </p>
+                @if ($bid->message)
+                    <p style="color: #555; margin-top: 1rem;"><strong>Message:</strong> {{ $bid->message }}</p>
+                @endif
+            </div>
+        @endforeach
     </div>
 @endsection

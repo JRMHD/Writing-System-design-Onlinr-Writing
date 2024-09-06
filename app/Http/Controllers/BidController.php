@@ -12,37 +12,40 @@ class BidController extends Controller
     // Display all bids for a writer
     public function writerIndex()
     {
-        // Ensure the authenticated user is a writer
         $writer = Auth::guard('writer')->user();
-        if (!$writer) {
-            return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer to view bids.']);
-        }
+        if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
+        return view('writer.bids.index', ['bids' => Bid::where('writer_id', $writer->id)->get()]);
+    }
 
-        $bids = Bid::where('writer_id', $writer->id)->get();
-        return view('writer.bids.index', compact('bids'));
+    // List all available assignments for writers
+    public function listAvailableAssignments()
+    {
+        $writer = Auth::guard('writer')->user();
+        if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
+        return view('writer.assignments.index', ['assignments' => Assignment::where('status', 'open')->get()]);
+    }
+
+    // Show assignment details
+    public function showAssignmentDetails($id)
+    {
+        $writer = Auth::guard('writer')->user();
+        if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
+        return view('writer.assignments.show', ['assignment' => Assignment::findOrFail($id)]);
     }
 
     // Show form to create a new bid
-    public function create()
+    public function create($assignmentId)
     {
-        // Ensure the authenticated user is a writer
         $writer = Auth::guard('writer')->user();
-        if (!$writer) {
-            return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer to create a bid.']);
-        }
-
-        $assignments = Assignment::all(); // Fetch all assignments for the form
-        return view('writer.bids.create', compact('assignments'));
+        if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
+        return view('writer.bids.create', ['assignment' => Assignment::findOrFail($assignmentId)]);
     }
 
     // Store a new bid
     public function store(Request $request)
     {
-        // Ensure the authenticated user is a writer
         $writer = Auth::guard('writer')->user();
-        if (!$writer) {
-            return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer to place a bid.']);
-        }
+        if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
 
         $request->validate([
             'assignment_id' => 'required|exists:assignments,id',
@@ -50,44 +53,47 @@ class BidController extends Controller
             'message' => 'nullable|string|max:255',
         ]);
 
-        // Insert the bid with the authenticated writer's ID
         Bid::create([
             'assignment_id' => $request->assignment_id,
-            'writer_id' => $writer->id, // Use the authenticated writer's ID
+            'writer_id' => $writer->id,
             'amount' => $request->amount,
             'message' => $request->message,
-            'status' => 'pending', // Default status
+            'status' => 'pending',
         ]);
 
         return redirect()->route('writer.bids.index')->with('success', 'Bid placed successfully.');
     }
 
-
     // Display all bids for an employer
     public function index($assignmentId)
     {
-        // Fetch the assignment
-        $assignment = Assignment::findOrFail($assignmentId);
-
-        // Fetch all bids related to this assignment
-        $bids = Bid::where('assignment_id', $assignmentId)->get();
-
-        // Pass both the assignment and bids to the view
-        return view('employer.assignments.bids.index', compact('bids', 'assignment'));
+        return view('employer.assignments.bids.index', [
+            'bids' => Bid::where('assignment_id', $assignmentId)->get(),
+            'assignment' => Assignment::findOrFail($assignmentId),
+        ]);
     }
 
     // Select a writer for an assignment
     public function selectWriter(Request $request)
     {
-        $request->validate([
-            'bid_id' => 'required|exists:bids,id',
-        ]);
-
+        $request->validate(['bid_id' => 'required|exists:bids,id']);
         $bid = Bid::findOrFail($request->bid_id);
         $bid->status = 'selected';
         $bid->save();
-
         return redirect()->route('employer.assignments.bids.index', ['assignmentId' => $bid->assignment_id])
             ->with('success', 'Writer selected successfully.');
+    }
+
+    // Update the status of a bid
+    public function updateStatus($id, $status)
+    {
+        $validStatuses = ['accepted', 'rejected', 'in-progress', 'completed'];
+        if (!in_array($status, $validStatuses)) return back()->withErrors(['error' => 'Invalid status.']);
+
+        $bid = Bid::findOrFail($id);
+        $bid->status = $status;
+        $bid->save();
+
+        return redirect()->back()->with('success', 'Bid status updated successfully.');
     }
 }

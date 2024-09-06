@@ -26,18 +26,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__ . '/auth.php';
-
 // Employer Authentication Routes
 Route::get('employer/login', [EmployerAuthController::class, 'showLoginForm'])->name('employer.login');
 Route::post('employer/login', [EmployerAuthController::class, 'login']);
@@ -60,18 +48,28 @@ Route::middleware(['auth:employer'])->group(function () {
     })->name('employer.dashboard');
 
     Route::prefix('employer')->name('employer.')->group(function () {
-        Route::resource('assignments', AssignmentController::class)->except(['show']);
+        Route::resource('assignments', AssignmentController::class);
     });
 
     Route::get('employer/assignments/{assignmentId}/bids', [BidController::class, 'index'])->name('employer.assignments.bids.index');
-    Route::post('employer/assignments/{assignmentId}/select-writer', [BidController::class, 'selectWriter'])->name('employer.assignments.selectWriter');
+    Route::patch('employer/bids/{id}/select', [BidController::class, 'selectWriter'])->name('employer.bids.select');
 });
 
 // Middleware for authenticated writers
 Route::middleware(['auth:writer'])->group(function () {
     Route::get('writer/dashboard', [WriterDashboardController::class, 'index'])->name('writer.dashboard');
 
+    Route::get('writer/assignments', [BidController::class, 'listAvailableAssignments'])->name('writer.assignments.index');
+    Route::get('writer/assignments/{id}', [BidController::class, 'showAssignmentDetails'])->name('writer.assignments.show');
+    Route::get('writer/assignments/{id}/bid', [BidController::class, 'create'])->name('writer.bids.create');
+
     Route::get('writer/bids', [BidController::class, 'writerIndex'])->name('writer.bids.index');
-    Route::get('writer/bids/create', [BidController::class, 'create'])->name('writer.bids.create');
     Route::post('writer/bids', [BidController::class, 'store'])->name('writer.bids.store');
 });
+
+require __DIR__ . '/auth.php';
+
+Route::patch('/employer/bids/{id}/status/{status}', [BidController::class, 'updateStatus'])->name('employer.bids.updateStatus');
+Route::patch('/employer/bids/mark-taken/{bid}', [BidController::class, 'markAsTaken'])->name('employer.bids.markTaken');
+Route::patch('/employer/bids/mark-completed/{bid}', [BidController::class, 'markAsCompleted'])->name('employer.bids.markCompleted');
+Route::patch('/employer/bids/mark-available/{bid}', [BidController::class, 'markAsAvailable'])->name('employer.bids.markAvailable');

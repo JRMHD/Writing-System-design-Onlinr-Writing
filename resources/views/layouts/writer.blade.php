@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Uvo Writers</title>
@@ -9,12 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --deep-orange: #FF5722;
-            --royal-blue: #4169E1;
+            --green: #28a745;
+            --light-green: #d4edda;
             --white: #FFFFFF;
-            --light-gray: #F5F5F5;
-            --medium-gray: #9E9E9E;
             --dark-gray: #333333;
+            --deep-orange: #FF5722;
+            /* For hover effects */
         }
 
         * {
@@ -25,7 +27,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--light-gray);
+            background-color: var(--light-green);
             color: var(--dark-gray);
             display: flex;
             min-height: 100vh;
@@ -35,11 +37,15 @@
             width: 250px;
             background-color: var(--white);
             color: var(--dark-gray);
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
         }
 
         .sidebar-header {
@@ -55,12 +61,12 @@
             font-size: 1.5rem;
             font-weight: 700;
             text-decoration: none;
-            color: var(--deep-orange);
+            color: var(--green);
         }
 
         .logo img {
             width: 40px;
-            height: 40px;
+            height: auto;
             margin-right: 0.5rem;
         }
 
@@ -75,6 +81,7 @@
 
         .nav-links {
             list-style: none;
+            padding-left: 0;
         }
 
         .nav-item {
@@ -88,22 +95,31 @@
             color: var(--dark-gray);
             text-decoration: none;
             border-radius: 0.5rem;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .nav-link:hover {
-            background-color: var(--deep-orange);
+            background-color: var(--green);
             color: var(--white);
         }
 
         .nav-link i {
             margin-right: 0.75rem;
+            font-size: 1.2rem;
+            color: var(--green);
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover i {
+            color: var(--white);
         }
 
         .main-content {
+            margin-left: 250px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            transition: margin-left 0.3s ease;
         }
 
         .top-bar {
@@ -112,13 +128,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 1000;
         }
 
         .search-bar {
             display: flex;
             align-items: center;
-            background-color: var(--light-gray);
+            background-color: var(--light-green);
             border-radius: 2rem;
             padding: 0.5rem 1rem;
         }
@@ -132,11 +153,11 @@
         }
 
         .user-actions a {
-            color: var(--royal-blue);
+            color: var(--green);
             text-decoration: none;
             margin-left: 1rem;
-            font-size: 1.2rem;
-            transition: color 0.2s ease;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
         }
 
         .user-actions a:hover {
@@ -145,24 +166,26 @@
 
         .content {
             padding: 2rem;
+            margin-top: 4rem;
             flex-grow: 1;
         }
 
         .dashboard-card {
             background-color: var(--white);
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .dashboard-card h2 {
-            color: var(--deep-orange);
-            margin-bottom: 1rem;
+            color: var(--green);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
         }
 
         .footer {
-            background-color: var(--deep-orange);
+            background-color: var(--green);
             color: var(--white);
             text-align: center;
             padding: 1rem;
@@ -170,10 +193,6 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-
             .sidebar {
                 width: 100%;
                 position: fixed;
@@ -183,10 +202,22 @@
                 height: auto;
                 padding: 1rem;
                 z-index: 1000;
+                transform: translateY(100%);
             }
 
-            .sidebar-header {
-                margin-bottom: 0;
+            .sidebar.active {
+                transform: translateY(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 60px;
+            }
+
+            .top-bar {
+                left: 0;
+                right: 0;
+                position: relative;
             }
 
             .menu-toggle {
@@ -201,19 +232,6 @@
                 display: block;
             }
 
-            .main-content {
-                margin-bottom: 60px;
-            }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-bar {
-                margin-bottom: 1rem;
-            }
-
             .user-actions {
                 display: flex;
                 justify-content: space-around;
@@ -224,13 +242,11 @@
 
 <body>
     <aside class="sidebar">
-        <div class="sidebar-header"
-            style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">
-            <a href="#" class="logo" style="text-decoration: none;">
-                <img src="/images/logo.png" alt="Logo" style="width: 150px; height: auto;">
+        <div class="sidebar-header">
+            <a href="#" class="logo" style="display: inline-block; width: 150px; height: auto;">
+                <img src="/images/logo.png" alt="Logo" style="width: 150%; height: auto; display: block;">
             </a>
-            <button class="menu-toggle" id="menuToggle"
-                style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #333;">
+            <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -250,9 +266,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/writer/assignments/" class="nav-link">
                         <i class="fas fa-gavel"></i>
-                        <span>Bids</span>
+                        <span>Available Assignments</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -286,9 +302,7 @@
 
         <main class="content">
             <div class="dashboard-card">
-                <h2 style="color: var(--deep-orange); font-size: 2rem; margin-bottom: 0.5rem;">
-                    Welcome, {{ Auth::user()->name }}!
-                </h2>
+                <h2>Welcome, {{ Auth::user()->name }}!</h2>
                 <p>Enjoy Your Writers Dashboard {{ Auth::user()->name }}.</p>
             </div>
             @yield('content')
@@ -304,6 +318,7 @@
         const navLinks = document.getElementById('navLinks');
 
         menuToggle.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('active');
             navLinks.classList.toggle('active');
         });
     </script>

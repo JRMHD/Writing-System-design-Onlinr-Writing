@@ -11,8 +11,13 @@
             theme: {
                 extend: {
                     colors: {
-                        'deep-orange': '#FF5722',
-                        'royal-blue': '#4169E1',
+                        'upwork-green': '#3CBE5C',
+                        'dark-gray': '#4A4A4A',
+                        'light-gray': '#F5F5F5',
+                        'text-gray': '#6D6E71'
+                    },
+                    fontFamily: {
+                        'body': ['Arial', 'sans-serif'],
                     }
                 }
             }
@@ -20,12 +25,12 @@
     </script>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-light-gray min-h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div class="text-center mb-8">
             <img src="{{ asset('images/logo.png') }}" alt="Company Logo" class="mx-auto w-32 h-auto mb-4">
-            <h1 class="text-3xl font-bold text-deep-orange">Writer Login</h1>
-            <p class="text-gray-600 mt-2">Access your writer dashboard</p>
+            <h1 class="text-2xl font-semibold text-upwork-green">Writer Login</h1>
+            <p class="text-text-gray mt-1">Access your writer dashboard</p>
         </div>
 
         @if (session('success'))
@@ -43,32 +48,32 @@
         <form method="POST" action="{{ route('writer.login') }}" class="space-y-4">
             @csrf
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label for="email" class="block text-sm font-medium text-dark-gray mb-1">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="you@example.com" required
                     value="{{ old('email') }}"
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-deep-orange transition duration-300">
+                    class="w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-upwork-green transition duration-300">
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-dark-gray mb-1">Password</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-deep-orange transition duration-300">
+                    class="w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-upwork-green transition duration-300">
             </div>
             <button type="submit"
-                class="w-full bg-deep-orange text-white py-2 rounded-md hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
+                class="w-full bg-upwork-green text-white py-2 rounded-md hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
                 Login
             </button>
         </form>
 
-        <p class="mt-6 text-center text-gray-600">
+        <p class="mt-6 text-center text-text-gray">
             Don't have an account?
             <a href="{{ route('writer.register') }}"
-                class="text-royal-blue hover:underline transition duration-300">Register here</a>
+                class="text-upwork-green hover:underline transition duration-300">Register here</a>
         </p>
 
-        <div class="mt-8 text-center text-sm text-gray-500">
+        <div class="mt-8 text-center text-sm text-text-gray">
             <p>By logging in, you agree to our</p>
-            <a href="#" class="text-deep-orange hover:underline transition duration-300">Terms of Service</a> and
-            <a href="#" class="text-deep-orange hover:underline transition duration-300">Privacy Policy</a>
+            <a href="#" class="text-upwork-green hover:underline transition duration-300">Terms of Service</a> and
+            <a href="#" class="text-upwork-green hover:underline transition duration-300">Privacy Policy</a>
         </div>
     </div>
 </body>

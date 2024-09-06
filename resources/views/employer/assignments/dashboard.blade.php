@@ -1,55 +1,52 @@
 @extends('layouts.employer')
 
 @section('content')
-    <div class="container" style="padding: 2rem;">
+    <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 2rem;">
+
         <!-- Welcome Message -->
-        <div class="welcome-section" style="margin-bottom: 2rem;">
-            {{-- <h1 style="color: var(--deep-orange); font-size: 2rem; margin-bottom: 0.5rem;">
-                Welcome, {{ Auth::user()->name }}!
-            </h1> --}}
-            <p style="font-size: 1rem; color: var(--dark-gray);">We're glad to see you back!</p>
+        <div
+            style="background-color: #ffffff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; text-align: center;">
+            <p style="font-size: 1rem; color: #6c757d;">We're glad to see you back!</p>
         </div>
 
         <!-- Button to Create New Assignment -->
-        <div class="create-assignment-section" style="margin-bottom: 2rem;">
-            <a href="{{ route('employer.assignments.create') }}" class="btn btn-primary"
-                style="background-color: var(--deep-orange); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; color: white; text-decoration: none; font-weight: 500; transition: background-color 0.3s ease;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <a href="{{ route('employer.assignments.create') }}"
+                style="background-color: #28a745; color: white; padding: 0.75rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 500; transition: background-color 0.3s ease;">
                 Create New Assignment
             </a>
         </div>
 
         <!-- Assignments Section -->
-        <div class="assignments-section">
-            <h2 style="color: var(--deep-orange); margin-bottom: 1.5rem;">Your Assignments</h2>
+        <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem;">
+            <h2 style="color: #28a745; font-size: 1.5rem; margin-bottom: 1.5rem;">Your Assignments</h2>
 
             @if ($assignments->isEmpty())
-                <p>You have no assignments. Create a new assignment to get started.</p>
+                <p style="text-align: center; color: #6c757d;">You have no assignments. Create a new assignment to get
+                    started.</p>
             @else
-                <table class="table mt-3"
-                    style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
                     <thead>
-                        <tr style="background-color: var(--light-gray); text-align: left;">
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange);">Title</th>
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange);">Status</th>
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange);">Actions</th>
+                        <tr style="background-color: #f1f3f5; text-align: left;">
+                            <th style="padding: 1rem; border-bottom: 2px solid #28a745;">Title</th>
+                            <th style="padding: 1rem; border-bottom: 2px solid #28a745;">Status</th>
+                            <th style="padding: 1rem; border-bottom: 2px solid #28a745;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($assignments as $assignment)
-                            <tr style="border-bottom: 1px solid var(--light-gray);">
+                            <tr style="border-bottom: 1px solid #e9ecef;">
                                 <td style="padding: 1rem;">{{ $assignment->title }}</td>
                                 <td style="padding: 1rem;">{{ ucfirst($assignment->status) }}</td>
                                 <td style="padding: 1rem;">
                                     <!-- Edit Assignment -->
                                     <a href="{{ route('employer.assignments.edit', $assignment->id) }}"
-                                        class="btn btn-warning btn-sm"
-                                        style="background-color: var(--royal-blue); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; transition: background-color 0.3s ease;">
+                                        style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; margin-right: 0.5rem; transition: background-color 0.3s ease;">
                                         Edit
                                     </a>
                                     <!-- View Bids for the Assignment -->
                                     <a href="{{ route('employer.assignments.bids.index', $assignment->id) }}"
-                                        class="btn btn-info btn-sm"
-                                        style="background-color: var(--deep-orange); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; transition: background-color 0.3s ease;">
+                                        style="background-color: #28a745; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; transition: background-color 0.3s ease;">
                                         View Bids
                                     </a>
                                 </td>

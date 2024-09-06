@@ -14,7 +14,11 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignments = Assignment::where('employer_id', Auth::id())->get();
+        // Get the assignments ordered by the most recent first
+        $assignments = Assignment::where('employer_id', Auth::id())
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+            ->get();
+
         return view('employer.assignments.index', compact('assignments'));
     }
 

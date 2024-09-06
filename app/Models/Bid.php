@@ -9,7 +9,7 @@ class Bid extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['assignment_id', 'writer_id', 'bid_amount', 'message'];
+    protected $fillable = ['assignment_id', 'writer_id', 'amount', 'message'];
 
     public function assignment()
     {

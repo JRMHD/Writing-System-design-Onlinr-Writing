@@ -1,55 +1,73 @@
 @extends('layouts.writer')
 
 @section('content')
-    <div class="container" style="padding: 2rem;">
-        <!-- Button to Place a New Bid -->
-        <div class="create-bid-section" style="margin-bottom: 2rem;">
-            <a href="{{ route('writer.bids.create') }}" class="btn btn-primary"
-                style="background-color: var(--deep-orange); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; color: white; text-decoration: none; font-weight: 500; transition: background-color 0.3s ease;">
-                Place a New Bid
-            </a>
+    <div style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
+        <!-- Header -->
+        <div
+            style="background-color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+            <h1 style="color: #14a800; font-size: 24px; margin: 0;">Find Work</h1>
+            <p style="color: #5e6d55; margin-top: 5px;">Proposals: {{ $bids->count() }} Available</p>
         </div>
 
-        <!-- Bids Section -->
-        <div class="bids-section">
-            <h2 style="color: var(--deep-orange); margin-bottom: 1.5rem;">Your Bids</h2>
+        <div style="display: flex; gap: 20px;">
+            <!-- Main Content Area -->
+            <div style="flex: 3;">
+                <!-- Available Assignments Section -->
+                <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+                    <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                        <h2 style="color: #001e00; font-size: 18px; margin: 0;">Jobs you might like</h2>
+                    </div>
 
-            @if ($bids->isEmpty())
-                <p>You have not placed any bids yet.</p>
-            @else
-                <table class="table mt-3"
-                    style="width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                    <thead>
-                        <tr style="background-color: var(--deep-orange); color: var(--white); text-align: left;">
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange); font-weight: 600;">
-                                Assignment Title</th>
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange); font-weight: 600;">Bid
-                                Amount</th>
-                            <th style="padding: 1rem; border-bottom: 2px solid var(--deep-orange); font-weight: 600;">Status
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($bids as $bid)
-                            <tr style="border-bottom: 1px solid var(--light-gray);">
-                                <td style="padding: 1rem; background-color: var(--white);">{{ $bid->assignment->title }}
-                                </td>
-                                <td style="padding: 1rem; background-color: var(--white); color: var(--royal-blue);">
-                                    ${{ $bid->amount }}
-                                </td>
-                                <td style="padding: 1rem; background-color: var(--white);">
-                                    <span
-                                        style="
-                                        color: 
-                                        {{ $bid->status === 'pending' ? 'red' : ($bid->status === 'selected' ? 'green' : 'var(--deep-orange)') }}">
-                                        {{ ucfirst($bid->status) }}
-                                    </span>
-                                </td>
-                            </tr>
+                    @if ($availableAssignments->isEmpty())
+                        <p style="color: #5e6d55; padding: 20px; text-align: center;">There are no available assignments at
+                            the moment.</p>
+                    @else
+                        @foreach ($availableAssignments as $assignment)
+                            <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                                <h3 style="color: #14a800; font-size: 16px; margin: 0 0 10px 0;">{{ $assignment->title }}
+                                </h3>
+                                <p style="color: #5e6d55; font-size: 14px; margin: 0 0 10px 0;">Word Count:
+                                    {{ $assignment->word_count }} | Deadline: {{ $assignment->deadline->format('M d, Y') }}
+                                </p>
+                                <a href="{{ route('writer.assignments.show', $assignment->id) }}"
+                                    style="background-color: #14a800; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; display: inline-block;">
+                                    View Job
+                                </a>
+                            </div>
                         @endforeach
-                    </tbody>
-                </table>
-            @endif
+                    @endif
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div style="flex: 1;">
+                <!-- Your Proposals Section -->
+                <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+                    <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                        <h2 style="color: #001e00; font-size: 18px; margin: 0;">Your Proposals</h2>
+                    </div>
+
+                    @if ($bids->isEmpty())
+                        <p style="color: #5e6d55; padding: 20px; text-align: center;">You have not placed any proposals yet.
+                        </p>
+                    @else
+                        @foreach ($bids as $bid)
+                            <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                                <h3 style="color: #14a800; font-size: 16px; margin: 0 0 10px 0;">
+                                    {{ $bid->assignment->title }}</h3>
+                                <p style="color: #14a800; font-size: 14px; margin: 0 0 5px 0;">Bid:
+                                    ${{ number_format($bid->amount, 2) }}</p>
+                                <p
+                                    style="font-weight: bold; font-size: 14px; margin: 0 0 5px 0; color: {{ $bid->status == 'accepted' ? '#14a800' : ($bid->status == 'pending' ? '#FF5722' : '#d14836') }};">
+                                    Status: {{ ucfirst($bid->status) }}
+                                </p>
+                                <p style="color: #5e6d55; font-size: 14px; margin: 0;">Submitted:
+                                    {{ $bid->created_at->format('M d, Y') }}</p>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 @endsection

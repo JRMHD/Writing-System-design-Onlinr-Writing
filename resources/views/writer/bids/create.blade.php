@@ -1,48 +1,49 @@
- @extends('layouts.writer')
+@extends('layouts.writer')
 
- @section('title', 'Place a Bid')
+@section('title', 'Place a Bid')
 
- @section('content')
-     <div class="container" style="padding: 2rem; max-width: 800px; margin: auto;">
-         <h1 style="color: var(--deep-orange); margin-bottom: 1rem; font-size: 2rem;">Place a Bid</h1>
+@section('content')
+    <div style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 40px;">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <!-- Header -->
+            <div
+                style="background-color: #ffffff; padding: 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+                <h1 style="color: #14a800; font-size: 28px; margin: 0 0 15px 0;">Place a Bid for "{{ $assignment->title }}"
+                </h1>
+                <p style="color: #5e6d55; font-size: 16px;">Submit your proposal</p>
+            </div>
 
-         <form action="{{ route('writer.bids.store') }}" method="POST"
-             style="background-color: var(--white); padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-             @csrf
+            <!-- Bid Form -->
+            <div
+                style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); padding: 30px;">
+                <form action="{{ route('writer.bids.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
 
-             <!-- Assignment Selection -->
-             <div class="form-group mb-4">
-                 <label for="assignment_id"
-                     style="font-weight: 600; color: var(--dark-gray); font-size: 1rem;">Assignment</label>
-                 <select name="assignment_id" id="assignment_id" class="form-control" required
-                     style="padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 0.25rem; width: 100%; font-size: 1rem;">
-                     <option value="" disabled selected>Select an assignment</option>
-                     @foreach ($assignments as $assignment)
-                         <option value="{{ $assignment->id }}">{{ $assignment->title }}</option>
-                     @endforeach
-                 </select>
-             </div>
+                    <!-- Bid Amount Input -->
+                    <div style="margin-bottom: 30px;">
+                        <label for="amount"
+                            style="display: block; color: #5e6d55; font-size: 16px; font-weight: 600; margin-bottom: 10px;">Bid
+                            Amount</label>
+                        <input type="number" name="amount" id="amount" required step="0.01"
+                            style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 16px;">
+                    </div>
 
-             <!-- Bid Amount -->
-             <div class="form-group mb-4">
-                 <label for="amount" style="font-weight: 600; color: var(--dark-gray); font-size: 1rem;">Bid
-                     Amount</label>
-                 <input type="number" name="amount" id="amount" class="form-control" step="0.01" required
-                     style="padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 0.25rem; width: 100%; font-size: 1rem;">
-             </div>
+                    <!-- Message Textarea -->
+                    <div style="margin-bottom: 30px;">
+                        <label for="message"
+                            style="display: block; color: #5e6d55; font-size: 16px; font-weight: 600; margin-bottom: 10px;">Message</label>
+                        <textarea name="message" id="message" rows="6" placeholder="Add a message (optional)"
+                            style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 16px; resize: vertical;"></textarea>
+                    </div>
 
-             <!-- Message -->
-             <div class="form-group mb-4">
-                 <label for="message" style="font-weight: 600; color: var(--dark-gray); font-size: 1rem;">Message</label>
-                 <textarea name="message" id="message" class="form-control" rows="4" placeholder="Add a message (optional)"
-                     style="padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 0.25rem; width: 100%; font-size: 1rem;"></textarea>
-             </div>
-
-             <!-- Submit Button -->
-             <button type="submit" class="btn btn-primary"
-                 style="background-color: var(--deep-orange); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; color: var(--white); font-size: 1rem; font-weight: 600; text-transform: uppercase; transition: background-color 0.3s ease; cursor: pointer;">
-                 Submit Bid
-             </button>
-         </form>
-     </div>
- @endsection
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        style="background-color: #14a800; color: white; border: none; padding: 14px 28px; border-radius: 24px; font-size: 16px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: background-color 0.3s ease;">
+                        Submit Bid
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Assignment;
 use App\Models\Bid;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,9 +11,11 @@ class WriterDashboardController extends Controller
 {
     public function index()
     {
-        // Fetch all bids for the authenticated writer
-        $bids = Bid::where('writer_id', Auth::id())->get();
+        $writer = Auth::guard('writer')->user();
 
-        return view('writer.dashboard', compact('bids'));
+        $availableAssignments = Assignment::where('status', 'open')->get();
+        $bids = Bid::where('writer_id', $writer->id)->with('assignment')->get();
+
+        return view('writer.dashboard', compact('availableAssignments', 'bids'));
     }
 }

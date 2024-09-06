@@ -3,115 +3,111 @@
 @section('title', 'Bids for Assignment')
 
 @section('content')
-    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f9fa; padding: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <!-- Title -->
+            <h1 style="font-size: 2.5rem; font-weight: 600; color: #333; text-align: center; margin-bottom: 2rem;">
+                Bids for "{{ $assignment->title }}"
+            </h1>
 
-        <!-- Title Section -->
-        <div class="title-section"
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1 style="font-size: 2.25rem; font-weight: 600; color: #2C3E50;">Bids for: <span
-                    style="color: #FF5722;">{{ $assignment->title }}</span></h1>
+            <!-- Bids List -->
+            @foreach ($bids as $bid)
+                <div
+                    style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 600; color: #333; margin-bottom: 0.5rem;">
+                        Bid by {{ $bid->writer->name }}
+                    </h2>
+                    <p style="font-size: 1rem; color: #555; margin-bottom: 0.5rem;">
+                        <strong>Bid Amount:</strong> ${{ number_format($bid->amount, 2) }}
+                    </p>
+                    <p style="font-size: 1rem; color: #555; margin-bottom: 0.5rem;">
+                        <strong>Status:</strong>
+                        @if ($bid->status === 'accepted')
+                            <span style="color: #28a745; font-weight: 600;">Accepted</span> <!-- Green for accepted -->
+                        @elseif ($bid->status === 'rejected')
+                            <span style="color: #dc3545; font-weight: 600;">Rejected</span> <!-- Red for rejected -->
+                        @elseif ($bid->status === 'in-progress')
+                            <span style="color: #007bff; font-weight: 600;">In Progress</span> <!-- Blue for in-progress -->
+                        @elseif ($bid->status === 'pending')
+                            <span style="color: #ffc107; font-weight: 600;">Pending</span> <!-- Yellow for pending -->
+                        @else
+                            <span style="color: #6c757d; font-weight: 600;">Unknown</span> <!-- Gray for unknown -->
+                        @endif
+                    </p>
+                    <p style="font-size: 1rem; color: #555; margin-bottom: 1rem;">
+                        <strong>Submitted:</strong> {{ $bid->created_at->format('M d, Y H:i') }}
+                    </p>
+                    @if ($bid->message)
+                        <p style="font-size: 1rem; color: #555; margin-bottom: 1rem;">
+                            <strong>Message:</strong> {{ $bid->message }}
+                        </p>
+                    @endif
+
+                    <!-- Update Status Buttons -->
+                    <div style="margin-top: 1rem;">
+                        @if ($bid->status === 'pending')
+                            <!-- Accept Bid -->
+                            <form
+                                action="{{ route('employer.bids.updateStatus', ['id' => $bid->id, 'status' => 'accepted']) }}"
+                                method="POST" style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit"
+                                    style="background-color: #28a745; color: #ffffff; padding: 0.5rem 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; margin-right: 0.5rem;">
+                                    Accept
+                                </button>
+                            </form>
+
+                            <!-- Reject Bid -->
+                            <form
+                                action="{{ route('employer.bids.updateStatus', ['id' => $bid->id, 'status' => 'rejected']) }}"
+                                method="POST" style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit"
+                                    style="background-color: #dc3545; color: #ffffff; padding: 0.5rem 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; margin-right: 0.5rem;">
+                                    Reject
+                                </button>
+                            </form>
+
+                            <!-- Mark as In Progress -->
+                            <form
+                                action="{{ route('employer.bids.updateStatus', ['id' => $bid->id, 'status' => 'in-progress']) }}"
+                                method="POST" style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit"
+                                    style="background-color: #007bff; color: #ffffff; padding: 0.5rem 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer;">
+                                    In Progress
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
         </div>
-
-        <!-- No Bids Found -->
-        @if ($bids->isEmpty())
-            <div style="text-align: center; padding: 3rem 0;">
-                <p style="font-size: 1.2rem; color: #7f8c8d;">No bids have been placed yet for this assignment. Check back
-                    later.</p>
-            </div>
-        @else
-            <!-- Bids Table -->
-            <div class="bids-table"
-                style="overflow-x: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: #ffffff;">
-                <table style="width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif;">
-                    <thead style="background-color: #FF5722; color: #fff;">
-                        <tr>
-                            <th style="padding: 1rem; text-align: left;">Writer</th>
-                            <th style="padding: 1rem; text-align: left;">Bid Amount</th>
-                            <th style="padding: 1rem; text-align: left;">Message</th>
-                            <th style="padding: 1rem; text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($bids as $bid)
-                            <tr style="border-bottom: 1px solid #ecf0f1;">
-                                <td style="padding: 1.25rem; color: #34495e;">{{ $bid->writer->name }}</td>
-                                <td style="padding: 1.25rem; color: #2ecc71;">${{ number_format($bid->amount, 2) }}</td>
-                                <td style="padding: 1.25rem; color: #7f8c8d;">{{ $bid->message ?? 'No message' }}</td>
-                                <td style="padding: 1.25rem; text-align: center;">
-                                    <form
-                                        action="{{ route('employer.assignments.selectWriter', ['assignmentId' => $assignment->id]) }}"
-                                        method="POST" style="display: inline-block;">
-                                        @csrf
-                                        <input type="hidden" name="bid_id" value="{{ $bid->id }}">
-                                        <button type="submit" class="select-writer-btn"
-                                            style="padding: 0.75rem 1.5rem; background-color: #3498db; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
-                                            Select Writer
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
     </div>
-
-    <!-- Styles for Hover and Responsive Behavior -->
-    <style>
-        /* Hover Effects for Buttons */
-        .select-writer-btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* Table Row Hover Effect */
-        tbody tr:hover {
-            background-color: #fafafa;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-
-            table thead {
-                display: none;
-            }
-
-            table tbody tr {
-                display: block;
-                margin-bottom: 1rem;
-                background-color: #fff;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                padding: 1rem;
-            }
-
-            table tbody tr td {
-                display: block;
-                text-align: right;
-                padding: 0.75rem 0;
-                position: relative;
-                border-bottom: none;
-            }
-
-            table tbody tr td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                top: 0;
-                font-weight: 600;
-                color: #34495e;
-                padding: 0.75rem;
-            }
-
-            table tbody tr td:last-child {
-                text-align: center;
-            }
-        }
-    </style>
 @endsection
+
+<style>
+    /* Hover Effects */
+    button:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    /* Add additional spacing for mobile devices */
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+        }
+    }
+</style>
