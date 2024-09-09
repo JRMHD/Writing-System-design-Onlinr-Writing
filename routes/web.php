@@ -65,6 +65,22 @@ Route::middleware(['auth:writer'])->group(function () {
 
     Route::get('writer/bids', [BidController::class, 'writerIndex'])->name('writer.bids.index');
     Route::post('writer/bids', [BidController::class, 'store'])->name('writer.bids.store');
+
+    // Display all active bids for a writer
+    Route::get('/writer/bids/active', [BidController::class, 'activeBids'])->name('writer.bids.active');
+
+    // Display other views information (rejected, in-progress, completed)
+    Route::get('/writer/bids/other-views', [BidController::class, 'otherViews'])->name('writer.bids.other-views');
+
+    // Cancel a bid
+    Route::post('/writer/bids/cancel/{id}', [BidController::class, 'cancelBid'])->name('writer.bids.cancel');
+
+    // Routes for writer's bids
+    Route::get('/writer/bids/active', [BidController::class, 'activeBids'])->name('writer.bids.active');
+    Route::get('/writer/bids/other', [BidController::class, 'otherViews'])->name('writer.bids.other_views');
+    Route::delete('/writer/bids/{id}/cancel', [BidController::class, 'cancelBid'])->name('writer.bids.cancel');
+    // Route for viewing bid details
+    Route::get('/writer/bids/{id}', [BidController::class, 'show'])->name('writer.bids.show');
 });
 
 require __DIR__ . '/auth.php';

@@ -6,7 +6,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Uvo Writers</title>
+    <title> {{ Auth::user()->name }} Writers Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -259,16 +259,17 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/writer/bids/create" class="nav-link">
-                        <i class="fas fa-tasks"></i>
-                        <span>Place a New Bid</span>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="/writer/assignments/" class="nav-link">
                         <i class="fas fa-gavel"></i>
                         <span>Available Assignments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/writer/bids/active" class="nav-link">
+                        <i class="fas fa-tasks"></i>
+                        <span>Active Bids</span>
                     </a>
                 </li>
                 <li class="nav-item">
