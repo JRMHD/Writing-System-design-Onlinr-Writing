@@ -13,8 +13,14 @@ class WriterDashboardController extends Controller
     {
         $writer = Auth::guard('writer')->user();
 
-        $availableAssignments = Assignment::where('status', 'open')->get();
-        $bids = Bid::where('writer_id', $writer->id)->with('assignment')->get();
+        $availableAssignments = Assignment::where('status', 'open')
+            ->latest()
+            ->get();
+
+        $bids = Bid::where('writer_id', $writer->id)
+            ->with('assignment')
+            ->latest()
+            ->get();
 
         return view('writer.dashboard', compact('availableAssignments', 'bids'));
     }

@@ -60,5 +60,11 @@ class Assignment extends Model
         return $this->status === 'open';
     }
 
+    public function acceptedBid()
+    {
+        return $this->hasOne(Bid::class)->where('status', 'accepted');
+    }
+
+
     // Add any other relationships or methods as necessary
 }

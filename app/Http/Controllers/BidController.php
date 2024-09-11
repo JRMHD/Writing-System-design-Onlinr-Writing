@@ -17,7 +17,7 @@ class BidController extends Controller
         $writer = Auth::guard('writer')->user();
         if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
 
-        return view('writer.bids.index', ['bids' => Bid::where('writer_id', $writer->id)->get()]);
+        return view('writer.bids.index', ['bids' => Bid::where('writer_id', $writer->id)->latest()->get()]);
     }
 
     /**
@@ -28,11 +28,25 @@ class BidController extends Controller
         $writer = Auth::guard('writer')->user();
         if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
 
-        $bids = Bid::where('writer_id', $writer->id)
+        $activeBids = Bid::where('writer_id', $writer->id)
             ->where('status', 'accepted')
+            ->whereHas('assignment', function ($query) {
+                $query->where('completed', false);
+            })
+            ->orderBy('created_at', 'desc')  //latest
             ->get();
 
-        return view('writer.bids.active', ['bids' => $bids]);
+        $completedBids = Bid::where('writer_id', $writer->id)
+            ->whereHas('assignment', function ($query) {
+                $query->where('completed', true);
+            })
+            ->orderBy('created_at', 'desc')  // latest
+            ->get();
+
+        return view('writer.bids.active', [
+            'activeBids' => $activeBids,
+            'completedBids' => $completedBids
+        ]);
     }
 
     /**
@@ -45,7 +59,7 @@ class BidController extends Controller
 
         $bids = Bid::where('writer_id', $writer->id)
             ->whereIn('status', ['rejected', 'in-progress', 'completed'])
-            ->orderBy('updated_at', 'desc')
+            ->latest()
             ->limit(5)
             ->get();
 
@@ -60,7 +74,7 @@ class BidController extends Controller
         $writer = Auth::guard('writer')->user();
         if (!$writer) return redirect()->route('writer.login')->withErrors(['error' => 'You must be logged in as a writer.']);
 
-        $assignments = Assignment::where('status', 'open')->get();
+        $assignments = Assignment::where('status', 'open')->latest()->get();
         return view('writer.assignments.index', ['assignments' => $assignments]);
     }
 
@@ -117,7 +131,7 @@ class BidController extends Controller
     public function index($assignmentId)
     {
         return view('employer.assignments.bids.index', [
-            'bids' => Bid::where('assignment_id', $assignmentId)->get(),
+            'bids' => Bid::where('assignment_id', $assignmentId)->latest()->get(),
             'assignment' => Assignment::findOrFail($assignmentId),
         ]);
     }

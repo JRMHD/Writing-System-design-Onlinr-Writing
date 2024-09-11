@@ -49,8 +49,12 @@ Route::middleware(['auth:employer'])->group(function () {
 
     Route::prefix('employer')->name('employer.')->group(function () {
         Route::resource('assignments', AssignmentController::class);
+        Route::resource('assignments', AssignmentController::class);
+        Route::get('/assignments-with-bids', [AssignmentController::class, 'bidOnAssignments'])->name('assignments.bid-on');
+        Route::get('/given-out-assignments', [AssignmentController::class, 'givenOutAssignments'])->name('assignments.given-out');
     });
-
+    Route::patch('/employer/assignments/{assignment}/mark-as-completed', [AssignmentController::class, 'markAsCompleted'])
+        ->name('employer.assignments.markAsCompleted');
     Route::get('employer/assignments/{assignmentId}/bids', [BidController::class, 'index'])->name('employer.assignments.bids.index');
     Route::patch('employer/bids/{id}/select', [BidController::class, 'selectWriter'])->name('employer.bids.select');
 });

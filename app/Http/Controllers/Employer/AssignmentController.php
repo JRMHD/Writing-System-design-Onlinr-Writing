@@ -3,36 +3,31 @@
 namespace App\Http\Controllers\Employer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Assignment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
-    /**
-     * Display a listing of the assignments.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:employer');
+    }
+
     public function index()
     {
-        // Get the assignments ordered by the most recent first
         $assignments = Assignment::where('employer_id', Auth::id())
-            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+            ->orderBy('created_at', 'desc')  // Changed to 'desc' to show latest on top
             ->get();
 
         return view('employer.assignments.index', compact('assignments'));
     }
 
-    /**
-     * Show the form for creating a new assignment.
-     */
     public function create()
     {
         return view('employer.assignments.create');
     }
 
-    /**
-     * Store a newly created assignment in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -55,18 +50,18 @@ class AssignmentController extends Controller
         return redirect()->route('employer.assignments.index')->with('success', 'Assignment created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified assignment.
-     */
+    public function show($id)
+    {
+        $assignment = Assignment::where('employer_id', Auth::id())->findOrFail($id);
+        return view('employer.assignments.show', compact('assignment'));
+    }
+
     public function edit($id)
     {
         $assignment = Assignment::where('employer_id', Auth::id())->findOrFail($id);
         return view('employer.assignments.edit', compact('assignment'));
     }
 
-    /**
-     * Update the specified assignment in storage.
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -83,14 +78,56 @@ class AssignmentController extends Controller
         return redirect()->route('employer.assignments.index')->with('success', 'Assignment updated successfully.');
     }
 
-    /**
-     * Remove the specified assignment from storage.
-     */
     public function destroy($id)
     {
         $assignment = Assignment::where('employer_id', Auth::id())->findOrFail($id);
         $assignment->delete();
 
         return redirect()->route('employer.assignments.index')->with('success', 'Assignment deleted successfully.');
+    }
+
+    public function bidOnAssignments()
+    {
+        $assignments = Assignment::where('employer_id', Auth::id())
+            ->whereHas('bids')
+            ->with('bids')  // Eager load bids
+            ->orderBy('created_at', 'desc')  // Changed to 'desc' to show latest on top
+            ->get();
+
+        return view('employer.assignments.bid_on', compact('assignments'));
+    }
+
+    public function givenOutAssignments()
+    {
+        // Fetch ongoing assignments
+        $assignments = Assignment::where('employer_id', Auth::id())
+            ->whereHas('bids', function ($query) {
+                $query->where('status', 'accepted')->whereHas('writer');
+            })
+            ->where('completed', false)  // Fetch only ongoing assignments
+            ->with(['acceptedBid.writer'])
+            ->orderBy('created_at', 'desc')  // Changed to 'desc' to show latest on top
+            ->get();
+
+        // Fetch completed assignments
+        $completedAssignments = Assignment::where('employer_id', Auth::id())
+            ->whereHas('bids', function ($query) {
+                $query->where('status', 'accepted')->whereHas('writer');
+            })
+            ->where('completed', true)  // Fetch only completed assignments
+            ->with(['acceptedBid.writer'])
+            ->orderBy('created_at', 'desc')  // Changed to 'desc' to show latest on top
+            ->get();
+
+        return view('employer.assignments.given_out', compact('assignments', 'completedAssignments'));
+    }
+
+    public function markAsCompleted($id)
+    {
+        $assignment = Assignment::where('employer_id', Auth::id())->findOrFail($id);
+        $assignment->completed = true;
+        $assignment->save();
+
+        return redirect()->route('employer.assignments.given-out')->with('success', 'Assignment marked as completed!');
     }
 }

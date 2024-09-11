@@ -279,20 +279,32 @@
             <ul class="nav-links" id="navLinks">
                 <li class="nav-item">
                     <a href="/employer/dashboard" class="nav-link">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/employer/assignments" class="nav-link">
-                        <i class="fas fa-tasks"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span>View Assignments</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/employer/given-out-assignments" class="nav-link">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Active Assignments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/employer/assignments-with-bids" class="nav-link">
                         <i class="fas fa-gavel"></i>
-                        <span>Bids</span>
+                        <span>Assignments with Bids</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="fas fa-comments"></i>
+                        <span>Messages</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -333,8 +345,13 @@
         </main>
 
         <footer class="footer">
-            © 2024 Uvo Writers. All rights reserved.
+            © <span id="currentYear"></span> Uvo Writers. All rights reserved. | Developed by <a
+                href="https://www.jrmhd.tech" target="_blank" rel="noopener noreferrer">Jrmhd Technologies</a>
         </footer>
+
+        <script>
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        </script>
     </div>
 
     <script>
