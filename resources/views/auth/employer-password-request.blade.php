@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Login</title>
+    <title>Employer Password Reset Request</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,12 +29,13 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div class="text-center mb-8">
             <img src="{{ asset('images/logo.png') }}" alt="Company Logo" class="mx-auto w-32 h-auto mb-4">
-            <h1 class="text-2xl font-semibold text-upwork-green">Employer Login</h1>
-            <p class="text-text-gray mt-2">Access your employer dashboard</p>
+            <h1 class="text-2xl font-semibold text-upwork-green">Reset Your Password</h1>
+            <p class="text-text-gray mt-2">Enter your email address and we'll send you a link to reset your password.
+            </p>
         </div>
 
-        @if (session('success'))
-            <p class="text-green-600 mb-4">{{ session('success') }}</p>
+        @if (session('status'))
+            <p class="text-green-600 mb-4">{{ session('status') }}</p>
         @endif
 
         @if ($errors->any())
@@ -45,7 +46,7 @@
             </ul>
         @endif
 
-        <form method="POST" action="{{ route('employer.login') }}" class="space-y-4">
+        <form method="POST" action="{{ route('employer.password.email') }}" class="space-y-4">
             @csrf
             <div>
                 <label for="email" class="block text-sm font-medium text-dark-gray mb-1">Email Address</label>
@@ -53,31 +54,17 @@
                     value="{{ old('email') }}"
                     class="w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-upwork-green transition duration-300">
             </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-dark-gray mb-1">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required
-                    class="w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-upwork-green transition duration-300">
-            </div>
             <button type="submit"
                 class="w-full bg-upwork-green text-white py-2 rounded-md hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
-                Login
+                Send Password Reset Link
             </button>
         </form>
-        <a href="{{ route('employer.password.request') }}" class="text-upwork-green hover:underline">Forgot Your
-            Password?</a>
-
 
         <p class="mt-6 text-center text-text-gray">
-            Don't have an account?
-            <a href="{{ route('employer.register') }}"
-                class="text-upwork-green hover:underline transition duration-300">Register here</a>
+            Remembered your password?
+            <a href="{{ route('employer.login') }}"
+                class="text-upwork-green hover:underline transition duration-300">Login here</a>
         </p>
-
-        <div class="mt-8 text-center text-sm text-text-gray">
-            <p>By logging in, you agree to our</p>
-            <a href="#" class="text-upwork-green hover:underline transition duration-300">Terms of Service</a> and
-            <a href="#" class="text-upwork-green hover:underline transition duration-300">Privacy Policy</a>
-        </div>
     </div>
 </body>
 

@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\CustomResetPasswordMail;
 
 class EmployerAuthController extends Controller
 {
@@ -69,5 +73,76 @@ class EmployerAuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/')->with('success', 'You have been logged out successfully.');
+    }
+
+    // Show Password Reset Request Form
+    public function showPasswordResetRequestForm()
+    {
+        return view('auth.employer-password-request');
+    }
+
+    // Send Password Reset Link
+    public function sendPasswordResetLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:employers,email',
+        ]);
+
+        $employer = Employer::where('email', $request->email)->first();
+        $token = Str::random(60);
+
+        DB::table('password_resets')->updateOrInsert([
+            'email' => $request->email,
+            'guard' => 'employer',
+        ], [
+            'token' => $token,
+            'created_at' => now(),
+        ]);
+
+        // Send the password reset link via email
+        Mail::to($employer->email)->send(new CustomResetPasswordMail($token, 'employer', $request->email));
+
+        return back()->with('status', 'We have emailed your password reset link!');
+    }
+
+    // Show Password Reset Form
+    public function showPasswordResetForm(Request $request, $token)
+    {
+        return view('auth.employer-password-reset', [
+            'token' => $token,
+            'email' => $request->email,  // Pass the email to the view
+        ]);
+    }
+
+
+    // Handle Password Reset
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:employers,email',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $passwordReset = DB::table('password_resets')->where([
+            'email' => $request->email,
+            'token' => $request->token,
+            'guard' => 'employer',
+        ])->first();
+
+        if (!$passwordReset) {
+            return back()->withErrors(['token' => 'This password reset token is invalid.']);
+        }
+
+        $employer = Employer::where('email', $request->email)->first();
+        $employer->password = Hash::make($request->password);
+        $employer->save();
+
+        DB::table('password_resets')->where([
+            'email' => $request->email,
+            'guard' => 'employer',
+        ])->delete();
+
+        return redirect('/employer/login')->with('status', 'Password has been reset successfully!');
     }
 }

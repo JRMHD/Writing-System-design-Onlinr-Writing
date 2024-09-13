@@ -63,6 +63,9 @@
                 Login
             </button>
         </form>
+        <a href="{{ route('writer.password.request') }}" class="text-upwork-green hover:underline">Forgot Your
+            Password?</a>
+
 
         <p class="mt-6 text-center text-text-gray">
             Don't have an account?

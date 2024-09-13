@@ -117,3 +117,27 @@ Route::patch('/employer/bids/{id}/status/{status}', [BidController::class, 'upda
 Route::patch('/employer/bids/mark-taken/{bid}', [BidController::class, 'markAsTaken'])->name('employer.bids.markTaken');
 Route::patch('/employer/bids/mark-completed/{bid}', [BidController::class, 'markAsCompleted'])->name('employer.bids.markCompleted');
 Route::patch('/employer/bids/mark-available/{bid}', [BidController::class, 'markAsAvailable'])->name('employer.bids.markAvailable');
+
+
+// Password Reset Routes for Writers
+Route::get('writer/password/reset', [WriterAuthController::class, 'showPasswordResetRequestForm'])->name('writer.password.request');
+Route::post('writer/password/reset', [WriterAuthController::class, 'sendPasswordResetLink'])->name('writer.password.email');
+Route::get('writer/password/reset/{token}', [WriterAuthController::class, 'showPasswordResetForm'])->name('writer.password.reset');
+Route::post('writer/password/reset/{token}', [WriterAuthController::class, 'resetPassword'])->name('writer.password.update');
+
+
+// Route to show the password reset request form
+Route::get('employer/password/reset', [EmployerAuthController::class, 'showPasswordResetRequestForm'])
+    ->name('employer.password.request');
+
+// Route to handle the password reset request
+Route::post('employer/password/email', [EmployerAuthController::class, 'sendPasswordResetLink'])
+    ->name('employer.password.email');
+
+// Route to show the password reset form
+Route::get('employer/password/reset/{token}', [EmployerAuthController::class, 'showPasswordResetForm'])
+    ->name('employer.password.reset');
+
+// Route to handle password reset
+Route::post('employer/password/reset', [EmployerAuthController::class, 'resetPassword'])
+    ->name('employer.password.update');
