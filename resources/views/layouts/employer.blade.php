@@ -314,7 +314,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/employer/profile" class="nav-link">
                         <i class="fas fa-cog"></i>
                         <span>Settings</span>
                     </a>
@@ -332,7 +332,7 @@
             <div class="user-actions">
                 <a href="#" title="Notifications"><i class="fas fa-bell"></i></a>
                 <a href="#" title="Messages"><i class="fas fa-envelope"></i></a>
-                <a href="#" title="Profile"><i class="fas fa-user-circle"></i></a>
+                <a href="/employer/profile" title="Profile"><i class="fas fa-user-circle"></i></a>
             </div>
         </header>
 
@@ -341,6 +341,12 @@
                 <h2>Welcome, {{ Auth::user()->name }}!</h2>
                 <p>Here you can manage your assignments, view bids, and handle payments.</p>
             </div>
+            {{-- @if ($employer->profile_completion < 70)
+                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
+                    <p>Your profile is incomplete. Please <a href="{{ route('employer.profile') }}">complete your
+                            profile</a>.</p>
+                </div>
+            @endif --}}
             @yield('content')
         </main>
 

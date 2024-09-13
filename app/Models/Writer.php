@@ -18,6 +18,10 @@ class Writer extends Authenticatable
         'phone',
         'password',
         // 'balance' if you plan to store it directly in the future
+        'profile_image',
+        'bio',
+        'skills',
+        'profile_completion',
     ];
 
     protected $hidden = [

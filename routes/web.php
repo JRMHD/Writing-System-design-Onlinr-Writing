@@ -15,6 +15,10 @@ use App\Http\Controllers\Writer\WithdrawalController;
 use App\Http\Controllers\Writer\WriterPaymentController;
 use App\Http\Controllers\Employer\EmployerWalletController;
 use App\Http\Controllers\Employer\DepositController;
+use App\Http\Controllers\EmployerProfileController;
+use App\Http\Controllers\WriterProfileController;
+use App\Http\Controllers\PublicProfileController;
+
 
 
 /*
@@ -71,6 +75,9 @@ Route::middleware(['auth:employer'])->group(function () {
     Route::post('/wallet/deposit', [DepositController::class, 'store'])->name('wallet.deposit'); // Define this controller and method
     Route::get('/wallet', [EmployerWalletController::class, 'showWallet'])->name('employer.wallet.show');
     Route::post('/wallet/deposit', [DepositController::class, 'store'])->name('wallet.deposit');
+
+    Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile');
+    Route::post('/employer/profile/update', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
 });
 
 // Middleware for authenticated writers
@@ -109,6 +116,9 @@ Route::middleware(['auth:writer'])->group(function () {
     Route::get('/balance', [WithdrawalController::class, 'showBalance'])->name('writer.balance');
     Route::post('/withdraw', [WithdrawalController::class, 'requestWithdrawal'])->name('writer.withdraw');
     Route::post('/withdraw/update/{id}', [WithdrawalController::class, 'updateWithdrawal'])->name('writer.withdraw.update');
+
+    Route::get('/writer/profile', [WriterProfileController::class, 'show'])->name('writer.profile');
+    Route::post('/writer/profile/update', [WriterProfileController::class, 'update'])->name('writer.profile.update');
 });
 
 require __DIR__ . '/auth.php';
@@ -141,3 +151,19 @@ Route::get('employer/password/reset/{token}', [EmployerAuthController::class, 's
 // Route to handle password reset
 Route::post('employer/password/reset', [EmployerAuthController::class, 'resetPassword'])
     ->name('employer.password.update');
+
+Route::get('/writer/profile/{id}', [PublicProfileController::class, 'showWriter'])->name('public.writer');
+Route::get('/employer/profile/{id}', [PublicProfileController::class, 'showEmployer'])->name('public.employer');
+
+
+// Public profile route for writer
+Route::get('/writer/profile/{id}', function ($id) {
+    $writer = App\Models\Writer::findOrFail($id);
+    return view('public.writer-profile', compact('writer'));
+})->name('public.writer.profile');
+
+// Public profile route for employer
+Route::get('/employer/profile/{id}', function ($id) {
+    $employer = App\Models\Employer::findOrFail($id);
+    return view('public.employer-profile', compact('employer'));
+})->name('public.employer.profile');

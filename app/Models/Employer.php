@@ -21,6 +21,9 @@ class Employer extends Authenticatable
         'email',
         'phone',
         'password',
+        'profile_image',
+        'bio',
+        'profile_completion',
     ];
 
     protected $hidden = [

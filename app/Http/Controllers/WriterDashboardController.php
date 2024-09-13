@@ -13,6 +13,11 @@ class WriterDashboardController extends Controller
     {
         $writer = Auth::guard('writer')->user();
 
+        // Check if the writer is authenticated
+        if (!$writer) {
+            return redirect()->route('login')->with('error', 'You must be logged in to view the dashboard.');
+        }
+
         $availableAssignments = Assignment::where('status', 'open')
             ->latest()
             ->get();
@@ -22,6 +27,7 @@ class WriterDashboardController extends Controller
             ->latest()
             ->get();
 
-        return view('writer.dashboard', compact('availableAssignments', 'bids'));
+        // Return the view with necessary data
+        return view('writer.dashboard', compact('writer', 'availableAssignments', 'bids'));
     }
 }
