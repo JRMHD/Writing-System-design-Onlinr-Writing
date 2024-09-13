@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Wallet;
+use App\Models\Payment;
+use App\Models\Writer;
 
 class AssignmentController extends Controller
 {
@@ -122,12 +125,38 @@ class AssignmentController extends Controller
         return view('employer.assignments.given_out', compact('assignments', 'completedAssignments'));
     }
 
+    // In markAsCompleted method:
     public function markAsCompleted($id)
     {
         $assignment = Assignment::where('employer_id', Auth::id())->findOrFail($id);
         $assignment->completed = true;
-        $assignment->save();
 
-        return redirect()->route('employer.assignments.given-out')->with('success', 'Assignment marked as completed!');
+        // Get the accepted bid and writer
+        $bid = $assignment->bids()->where('status', 'accepted')->first();
+        if ($bid) {
+            $writer = $bid->writer;
+            $amount = $bid->amount;
+
+            // Deduct from employer wallet
+            $wallet = Wallet::where('employer_id', Auth::id())->first();
+            if ($wallet->balance >= $amount) {
+                $wallet->balance -= $amount;
+                $wallet->save();
+
+                // Record payment to writer
+                Payment::create([
+                    'writer_id' => $writer->id,
+                    'assignment_id' => $assignment->id,
+                    'amount' => $amount,
+                ]);
+
+                $assignment->save();
+                return redirect()->route('employer.assignments.given-out')->with('success', 'Assignment marked as completed and payment processed.');
+            } else {
+                return redirect()->route('employer.assignments.given-out')->withErrors(['error' => 'Insufficient wallet balance.']);
+            }
+        }
+
+        return redirect()->route('employer.assignments.given-out')->withErrors(['error' => 'No accepted bid for this assignment.']);
     }
 }

@@ -1,10 +1,14 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+// Import the Deposit model
+use App\Models\Deposit;
 
 class Employer extends Authenticatable
 {
@@ -12,11 +16,6 @@ class Employer extends Authenticatable
 
     protected $guard = 'employer';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -24,22 +23,36 @@ class Employer extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relationship with Wallet
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'employer_id');
+    }
+
+    // Relationship with Assignments
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    // Relationship with Deposits
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, 'employer_id');
+    }
+
+    // Calculate employer's wallet balance
+    public function getBalanceAttribute()
+    {
+        return $this->wallet ? $this->wallet->balance : 0;
+    }
 }

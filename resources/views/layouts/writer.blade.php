@@ -278,7 +278,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/writer/balance" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Payments</span>
                     </a>

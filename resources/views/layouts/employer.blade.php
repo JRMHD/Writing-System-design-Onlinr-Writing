@@ -308,7 +308,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/wallet" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Wallet</span>
                     </a>

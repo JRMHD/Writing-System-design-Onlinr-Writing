@@ -12,34 +12,38 @@ class Writer extends Authenticatable
 
     protected $guard = 'writer';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'phone',
         'password',
+        // 'balance' if you plan to store it directly in the future
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'writer_id');
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class, 'writer_id');
+    }
+
+    // Calculate writer balance dynamically
+    public function getBalanceAttribute()
+    {
+        $totalPayments = $this->payments()->sum('amount');
+        $totalWithdrawals = $this->withdrawals()->sum('amount');
+        return $totalPayments - $totalWithdrawals;
+    }
 }

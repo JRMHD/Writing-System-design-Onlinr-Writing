@@ -8,8 +8,14 @@ use App\Http\Controllers\Employer\AssignmentController;
 use App\Http\Controllers\WriterDashboardController;
 use App\Http\Controllers\BidController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\WriterProfileController;
+
 use App\Http\Controllers\MessageController;
+// Import the controllers with their full namespaces
+use App\Http\Controllers\Writer\WithdrawalController;
+use App\Http\Controllers\Writer\WriterPaymentController;
+use App\Http\Controllers\Employer\EmployerWalletController;
+use App\Http\Controllers\Employer\DepositController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +63,14 @@ Route::middleware(['auth:employer'])->group(function () {
         ->name('employer.assignments.markAsCompleted');
     Route::get('employer/assignments/{assignmentId}/bids', [BidController::class, 'index'])->name('employer.assignments.bids.index');
     Route::patch('employer/bids/{id}/select', [BidController::class, 'selectWriter'])->name('employer.bids.select');
+
+
+    Route::get('/wallet', [EmployerWalletController::class, 'showWallet'])->name('wallet.index');
+    Route::post('/wallet/deposit', [EmployerWalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::get('/wallet', [EmployerWalletController::class, 'showWallet'])->name('wallet.show');
+    Route::post('/wallet/deposit', [DepositController::class, 'store'])->name('wallet.deposit'); // Define this controller and method
+    Route::get('/wallet', [EmployerWalletController::class, 'showWallet'])->name('employer.wallet.show');
+    Route::post('/wallet/deposit', [DepositController::class, 'store'])->name('wallet.deposit');
 });
 
 // Middleware for authenticated writers
@@ -85,6 +99,16 @@ Route::middleware(['auth:writer'])->group(function () {
     Route::delete('/writer/bids/{id}/cancel', [BidController::class, 'cancelBid'])->name('writer.bids.cancel');
     // Route for viewing bid details
     Route::get('/writer/bids/{id}', [BidController::class, 'show'])->name('writer.bids.show');
+
+    Route::get('payments/history', [WriterPaymentController::class, 'paymentHistory'])->name('writer.payments.history');
+    Route::get('withdrawals/request', [WithdrawalController::class, 'showForm'])->name('writer.withdrawals.request');
+    Route::post('withdrawals/request', [WithdrawalController::class, 'requestWithdrawal'])->name('writer.withdrawals.submit');
+    Route::get('/balance', [WriterPaymentController::class, 'showBalance'])->name('writer.balance');
+    Route::get('withdrawals/history', [WithdrawalController::class, 'history'])->name('writer.withdrawals.history');
+    Route::get('/writer/balance', [App\Http\Controllers\Writer\WriterPaymentController::class, 'showBalance'])->name('writer.balance');
+    Route::get('/balance', [WithdrawalController::class, 'showBalance'])->name('writer.balance');
+    Route::post('/withdraw', [WithdrawalController::class, 'requestWithdrawal'])->name('writer.withdraw');
+    Route::post('/withdraw/update/{id}', [WithdrawalController::class, 'updateWithdrawal'])->name('writer.withdraw.update');
 });
 
 require __DIR__ . '/auth.php';
