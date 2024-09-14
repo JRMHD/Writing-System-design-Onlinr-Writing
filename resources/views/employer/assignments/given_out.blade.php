@@ -51,6 +51,7 @@
                                         as Completed</button>
                                 </form>
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -91,6 +92,12 @@
                                 @else
                                     <span style="color: #808080; font-style: italic;">N/A</span>
                                 @endif
+                            </td>
+                            <td style="padding: 15px; border-bottom: 1px solid #e0e0e0;">
+                                <a href="{{ route('ratings.create', $assignment->acceptedBid->writer->id) }}"
+                                    style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; transition: background-color 0.3s;">Rate
+                                    Writer</a>
+                                <!-- existing code... -->
                             </td>
                         </tr>
                     @endforeach

@@ -72,7 +72,7 @@ class WriterAuthController extends Controller
         Auth::guard('writer')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'You have been logged out successfully.');
+        return redirect('/writer/login')->with('success', 'You have been logged out successfully.');
     }
 
     // Show Password Reset Request Form

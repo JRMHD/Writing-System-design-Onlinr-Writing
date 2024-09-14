@@ -72,7 +72,7 @@ class EmployerAuthController extends Controller
         Auth::guard('employer')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'You have been logged out successfully.');
+        return redirect('/employer/login')->with('success', 'You have been logged out successfully.');
     }
 
     // Show Password Reset Request Form

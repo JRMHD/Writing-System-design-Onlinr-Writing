@@ -42,7 +42,11 @@
                             <strong>Message:</strong> {{ $bid->message }}
                         </p>
                     @endif
-
+                    <!-- View Writer Profile Button -->
+                    <a href="{{ url('writer/profile/public', $bid->writer->id) }}"
+                        style="background-color: #007bff; color: #ffffff; padding: 0.5rem 1rem; border: none; border-radius: 5px; font-size: 1rem; text-decoration: none; cursor: pointer;">
+                        View Writer Profile
+                    </a>
                     <!-- Update Status Buttons -->
                     <div style="margin-top: 1rem;">
                         @if ($bid->status === 'pending')

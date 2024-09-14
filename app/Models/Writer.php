@@ -50,4 +50,9 @@ class Writer extends Authenticatable
         $totalWithdrawals = $this->withdrawals()->sum('amount');
         return $totalPayments - $totalWithdrawals;
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

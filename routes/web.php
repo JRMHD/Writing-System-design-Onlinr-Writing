@@ -18,6 +18,7 @@ use App\Http\Controllers\Employer\DepositController;
 use App\Http\Controllers\EmployerProfileController;
 use App\Http\Controllers\WriterProfileController;
 use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\RatingController;
 
 
 
@@ -119,6 +120,7 @@ Route::middleware(['auth:writer'])->group(function () {
 
     Route::get('/writer/profile', [WriterProfileController::class, 'show'])->name('writer.profile');
     Route::post('/writer/profile/update', [WriterProfileController::class, 'update'])->name('writer.profile.update');
+    Route::post('/writer-logout', [WriterAuthController::class, 'logout'])->name('writer.logout');
 });
 
 require __DIR__ . '/auth.php';
@@ -152,10 +154,6 @@ Route::get('employer/password/reset/{token}', [EmployerAuthController::class, 's
 Route::post('employer/password/reset', [EmployerAuthController::class, 'resetPassword'])
     ->name('employer.password.update');
 
-Route::get('/writer/profile/{id}', [PublicProfileController::class, 'showWriter'])->name('public.writer');
-Route::get('/employer/profile/{id}', [PublicProfileController::class, 'showEmployer'])->name('public.employer');
-
-
 // Public profile route for writer
 Route::get('/writer/profile/{id}', function ($id) {
     $writer = App\Models\Writer::findOrFail($id);
@@ -167,3 +165,16 @@ Route::get('/employer/profile/{id}', function ($id) {
     $employer = App\Models\Employer::findOrFail($id);
     return view('public.employer-profile', compact('employer'));
 })->name('public.employer.profile');
+
+Route::get('/writer/profile/public/{id}', [WriterProfileController::class, 'viewPublic'])->name('writer.profile.public');
+
+
+Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile');
+Route::post('/employer/profile', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
+Route::get('/employer/profile/public/{id}', [EmployerProfileController::class, 'viewPublic'])->name('employer.profile.public');
+
+
+
+
+Route::get('ratings/{writerId}/create', [RatingController::class, 'create'])->name('ratings.create');
+Route::post('ratings/{writerId}', [RatingController::class, 'store'])->name('ratings.store');

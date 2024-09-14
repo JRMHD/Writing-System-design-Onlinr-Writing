@@ -12,10 +12,48 @@
             background-color: #f7f9fc;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 16px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-form {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .logout-button {
+            background-color: #d14836;
+            color: #ffffff;
+            border: none;
+            border-radius: 24px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #c53727;
+        }
+
+        .content {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            flex-grow: 1;
+            padding: 32px 16px;
         }
 
         .container {
@@ -84,7 +122,8 @@
             margin-bottom: 16px;
         }
 
-        .dashboard-link {
+        .dashboard-link,
+        .public-link {
             display: inline-block;
             background-color: #001e00;
             color: #ffffff;
@@ -97,58 +136,66 @@
             transition: background-color 0.2s;
         }
 
-        .dashboard-link:hover {
+        .dashboard-link:hover,
+        .public-link:hover {
             background-color: #052e05;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Update Your Profile</h1>
+    <div class="page-wrapper">
+        <header class="header">
+            <form method="POST" action="{{ route('writer.logout') }}" class="logout-form">
+                @csrf
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </header>
+        <main class="content">
+            <div class="container">
+                <h1>Update Your Profile</h1>
 
-        @if (session('status'))
-            <p class="status">{{ session('status') }}</p>
-        @endif
+                @if (session('status'))
+                    <p class="status">{{ session('status') }}</p>
+                @endif
 
-        @if ($errors->any())
-            <ul class="error">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @endif
+                @if ($errors->any())
+                    <ul class="error">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
 
-        <form method="POST" action="{{ route('writer.profile.update') }}" enctype="multipart/form-data">
-            @csrf
-            <div>
-                <label for="profile_image">Profile Image</label>
-                <input type="file" id="profile_image" name="profile_image">
-            </div>
-            <div>
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name"
-                    value="{{ old('name', auth()->guard('writer')->user()->name) }}">
-            </div>
-            <div>
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email"
-                    value="{{ old('email', auth()->guard('writer')->user()->email) }}" readonly>
-            </div>
-            <div>
-                <label for="bio">Bio</label>
-                <textarea id="bio" name="bio" rows="4">{{ old('bio', auth()->guard('writer')->user()->bio) }}</textarea>
-            </div>
-            <div>
-                <label for="skills">Skills</label>
-                <input type="text" id="skills" name="skills"
-                    value="{{ old('skills', auth()->guard('writer')->user()->skills) }}">
-            </div>
+                <form method="POST" action="{{ route('writer.profile.update') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name"
+                            value="{{ old('name', auth()->guard('writer')->user()->name) }}">
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email"
+                            value="{{ old('email', auth()->guard('writer')->user()->email) }}" readonly>
+                    </div>
+                    <div>
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="4">{{ old('bio', auth()->guard('writer')->user()->bio) }}</textarea>
+                    </div>
+                    <div>
+                        <label for="skills">Skills</label>
+                        <input type="text" id="skills" name="skills"
+                            value="{{ old('skills', auth()->guard('writer')->user()->skills) }}">
+                    </div>
 
-            <button type="submit">Save Changes</button>
-        </form>
+                    <button type="submit">Save Changes</button>
+                </form>
 
-        <a href="/writer/dashboard" class="dashboard-link">Go to Dashboard</a>
+                <a href="/writer/dashboard" class="dashboard-link">Go to Dashboard</a>
+                <a href="{{ route('writer.profile.public', $writer->id) }}" class="public-link">View as Public</a>
+            </div>
+        </main>
     </div>
 </body>
 

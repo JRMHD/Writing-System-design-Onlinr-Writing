@@ -57,4 +57,16 @@ class WriterProfileController extends Controller
             return redirect()->back()->with('error', 'An error occurred while saving your profile. Please try again.');
         }
     }
+    /**
+     * View the writer's profile as public.
+     */
+    public function viewPublic($id)
+    {
+        $writer = Writer::with('ratings.employer')->findOrFail($id);
+
+        // Calculate average rating
+        $averageRating = $writer->ratings()->avg('rating');
+
+        return view('profile.writer-profile-public', compact('writer', 'averageRating'));
+    }
 }

@@ -312,12 +312,13 @@
                 <p>Enjoy Your Writers Dashboard {{ Auth::user()->name }}.</p>
             </div>
 
-            @if ($writer->profile_completion < 70)
+            @if (isset($writer) && $writer->profile_completion < 70)
                 <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
                     <p>Your profile is incomplete. Please <a href="{{ route('writer.profile') }}">complete your
                             profile</a>.</p>
                 </div>
             @endif
+
             @yield('content')
         </main>
 

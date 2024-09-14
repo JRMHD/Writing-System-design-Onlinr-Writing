@@ -25,6 +25,14 @@
             padding: 32px;
             width: 100%;
             max-width: 480px;
+            position: relative;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 24px;
+            max-width: 150px;
+            height: auto;
         }
 
         h1 {
@@ -32,6 +40,7 @@
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 24px;
+            text-align: center;
         }
 
         label {
@@ -68,6 +77,9 @@
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.2s;
+            display: block;
+            width: 100%;
+            margin-top: 16px;
         }
 
         button:hover {
@@ -95,16 +107,49 @@
             font-weight: 500;
             margin-top: 16px;
             transition: background-color 0.2s;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
         }
 
         .dashboard-link:hover {
             background-color: #052e05;
+        }
+
+        .logout-form {
+            position: absolute;
+            top: -50px;
+            right: 0;
+        }
+
+        .logout-button {
+            background-color: #ffffff;
+            color: #d14836;
+            border: 2px solid #d14836;
+            border-radius: 24px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #d14836;
+            color: #ffffff;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- Logout Form -->
+        <form method="POST" action="{{ route('employer.logout') }}" class="logout-form">
+            @csrf
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+
+        <img src="/images/logo.png" alt="Company Logo" class="logo">
         <h1>Update Your Profile</h1>
 
         @if (session('status'))
@@ -122,10 +167,6 @@
         <form method="POST" action="{{ route('employer.profile.update') }}" enctype="multipart/form-data">
             @csrf
             <div>
-                <label for="profile_image">Profile Image</label>
-                <input type="file" id="profile_image" name="profile_image">
-            </div>
-            <div>
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name"
                     value="{{ old('name', auth()->guard('employer')->user()->name) }}">
@@ -142,7 +183,10 @@
 
             <button type="submit">Save Changes</button>
         </form>
-
+        <!-- View as Public Button -->
+        <a href="{{ route('employer.profile.public', auth()->guard('employer')->user()->id) }}" class="dashboard-link">
+            View as Public
+        </a>
         <a href="/employer/dashboard" class="dashboard-link">Go to Dashboard</a>
     </div>
 </body>

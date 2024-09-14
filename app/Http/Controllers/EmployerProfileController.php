@@ -62,4 +62,11 @@ class EmployerProfileController extends Controller
             return redirect()->back()->with('error', 'An error occurred while saving your profile. Please try again.');
         }
     }
+
+    // View the public version of the employer profile
+    public function viewPublic($id)
+    {
+        $employer = Employer::findOrFail($id);
+        return view('profile.employer-profile-public', compact('employer'));
+    }
 }
