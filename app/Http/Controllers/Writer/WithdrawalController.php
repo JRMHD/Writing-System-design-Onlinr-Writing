@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Writer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Withdrawal;
+use App\Models\Writer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,48 +25,40 @@ class WithdrawalController extends Controller
         return view('writer.balance', compact('writer', 'payments', 'withdrawals'));
     }
 
-    // Handle withdrawal request
+    /**
+     * Handle withdrawal request via AJAX
+     */
     public function requestWithdrawal(Request $request)
     {
+        // Validate the withdrawal amount
         $request->validate([
             'amount' => 'required|numeric|min:0.01',
         ]);
 
         $writer = Auth::user();
+        $amount = $request->amount;
 
         // Check if the writer has sufficient balance
-        if ($writer->balance < $request->amount) {
-            return redirect()->back()->with('error', 'Insufficient balance.');
+        if ($writer->balance < $amount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient balance for this withdrawal.',
+            ], 400);
         }
 
-        // Create a new withdrawal record
-        $withdrawal = new Withdrawal();
-        $withdrawal->writer_id = $writer->id;
-        $withdrawal->amount = $request->amount;
-        $withdrawal->save(); // Save withdrawal record
-
-        // No need to update balance directly, as it's calculated dynamically
-
-        return redirect()->route('writer.balance')->with('success', 'Withdrawal request successful.');
-    }
-
-    // Update an existing withdrawal request
-    public function updateWithdrawal(Request $request, $id)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:0.01',
+        // Create a new withdrawal record with status 'pending'
+        $withdrawal = Withdrawal::create([
+            'writer_id' => $writer->id,
+            'amount' => $amount,
+            'status' => 'pending', // Assuming you have a status field
         ]);
 
-        // Find the existing withdrawal record by its ID
-        $withdrawal = Withdrawal::find($id);
+        // Update the writer's balance
+        Writer::where('id', $writer->id)->decrement('balance', $amount);
 
-        if ($withdrawal) {
-            $withdrawal->amount = $request->amount; // Set new amount
-            $withdrawal->save(); // Save the changes
-
-            return redirect()->route('writer.balance')->with('success', 'Withdrawal updated successfully.');
-        }
-
-        return redirect()->route('writer.balance')->with('error', 'Withdrawal not found.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Withdrawal request successful. It will be processed shortly.',
+        ]);
     }
 }

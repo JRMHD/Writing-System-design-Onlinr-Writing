@@ -178,3 +178,13 @@ Route::get('/employer/profile/public/{id}', [EmployerProfileController::class, '
 
 Route::get('ratings/{writerId}/create', [RatingController::class, 'create'])->name('ratings.create');
 Route::post('ratings/{writerId}', [RatingController::class, 'store'])->name('ratings.store');
+
+Route::prefix('employer')->name('employer.')->middleware('auth:employer')->group(function () {
+    Route::get('/wallet', [EmployerWalletController::class, 'showWallet'])->name('wallet.show');
+    Route::post('/wallet/deposit', [DepositController::class, 'store'])->name('wallet.deposit');
+});
+
+Route::prefix('writer')->name('writer.')->middleware('auth:writer')->group(function () {
+    Route::get('/balance', [WriterPaymentController::class, 'showBalance'])->name('balance.show');
+    Route::post('/withdraw', [WithdrawalController::class, 'requestWithdrawal'])->name('withdraw');
+});
