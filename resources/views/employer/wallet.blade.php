@@ -324,6 +324,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         // Hide processing animation and loader
                         processing.style.display = 'none';
                         hideLoader();

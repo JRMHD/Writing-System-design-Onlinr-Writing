@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MpesaController;
+use App\Http\Controllers\Employer\DepositController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Mpesa Callback Route
 Route::post('/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
+Route::post('/mpesa/callback', [DepositController::class, 'handleMpesaCallback'])->name('mpesa.callback');
