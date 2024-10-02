@@ -3,10 +3,9 @@
 
 <head>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{ Auth::user()->name }} Writers Dashboard</title>
+    <title>{{ Auth::user()->name }} Writers Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +15,6 @@
             --white: #FFFFFF;
             --dark-gray: #333333;
             --deep-orange: #FF5722;
-            /* For hover effects */
         }
 
         * {
@@ -182,6 +180,14 @@
             color: var(--green);
             margin-bottom: 0.5rem;
             font-size: 2rem;
+            font-weight: 600;
+            /* Semibold */
+        }
+
+        .dashboard-card p {
+            font-size: 1rem;
+            font-weight: 400;
+            /* Regular */
         }
 
         .footer {
@@ -243,8 +249,9 @@
 <body>
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="logo" style="display: inline-block; width: 150px; height: auto;">
-                <img src="/images/logo.png" alt="Logo" style="width: 150%; height: auto; display: block;">
+            <a href="#" class="logo">
+                <img src="/images/logo.png" alt="Logo" style="width: 40px; height: auto;">
+                Uvo Writers
             </a>
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
@@ -268,11 +275,11 @@
                 <li class="nav-item">
                     <a href="/writer/bids/active" class="nav-link">
                         <i class="fas fa-hand-paper"></i>
-                        <span>Active Bids</span>
+                        <span>Active Orders</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-comments"></i>
                         <span>Messages</span>
                     </a>
@@ -309,7 +316,7 @@
         <main class="content">
             <div class="dashboard-card">
                 <h2>Welcome, {{ Auth::user()->name }}!</h2>
-                <p>Enjoy Your Writers Dashboard {{ Auth::user()->name }}.</p>
+                <p>Enjoy Your Writers Dashboard.</p>
             </div>
 
             @if (isset($writer) && $writer->profile_completion < 70)

@@ -25,7 +25,7 @@
                     </div>
                     <div style="flex: 1; text-align: right; padding-left: 20px;">
                         <p style="color: #14a800; font-size: 20px; font-weight: bold; margin: 0;">Budget:
-                            ${{ number_format($assignment->budget, 2) }}</p>
+                            KES {{ number_format($assignment->budget, 2) }}</p>
                     </div>
                 </div>
 

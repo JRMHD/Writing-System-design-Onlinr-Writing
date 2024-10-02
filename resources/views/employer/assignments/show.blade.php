@@ -14,7 +14,7 @@
             <p style="margin-bottom: 10px;"><strong style="color: #656565;">Deadline:</strong>
                 {{ $assignment->deadline->format('Y-m-d') }}</p>
             <p style="margin-bottom: 10px;"><strong style="color: #656565;">Budget:</strong>
-                ${{ number_format($assignment->budget, 2) }}</p>
+                KES {{ number_format($assignment->budget, 2) }}</p>
             <p style="margin-bottom: 10px;">
                 <strong style="color: #656565;">Writer Working on the Assignment:</strong>
                 @if ($assignment->acceptedBid && $assignment->acceptedBid->writer)

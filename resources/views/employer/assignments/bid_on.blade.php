@@ -29,7 +29,7 @@
                             <td style="padding: 15px; border-bottom: 1px solid #e0e0e0;">
                                 {{ $assignment->deadline->format('Y-m-d') }}</td>
                             <td style="padding: 15px; border-bottom: 1px solid #e0e0e0;">
-                                ${{ number_format($assignment->budget, 2) }}</td>
+                                KES {{ number_format($assignment->budget, 2) }}</td>
                             <td style="padding: 15px; border-bottom: 1px solid #e0e0e0;">{{ $assignment->bids->count() }}
                             </td>
                             <td style="padding: 15px; border-bottom: 1px solid #e0e0e0;">

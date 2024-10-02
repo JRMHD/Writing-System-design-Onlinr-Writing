@@ -23,7 +23,7 @@
                                 {{ $bid->assignment->title }}
                             </a>
                         </td>
-                        <td style="padding: 15px;">${{ $bid->amount }}</td>
+                        <td style="padding: 15px;">KES {{ $bid->amount }}</td>
                         <td style="padding: 15px;">
                             <span
                                 style="background-color: #e0f7e0; color: #14a800; padding: 5px 10px; border-radius: 15px; font-size: 12px;">
@@ -78,7 +78,7 @@
                                 {{ $bid->assignment->title }}
                             </a>
                         </td>
-                        <td style="padding: 15px;">${{ $bid->amount }}</td>
+                        <td style="padding: 15px;">KES {{ $bid->amount }}</td>
                         <td style="padding: 15px;">
                             <span
                                 style="background-color: #e0f7e0; color: #14a800; padding: 5px 10px; border-radius: 15px; font-size: 12px;">

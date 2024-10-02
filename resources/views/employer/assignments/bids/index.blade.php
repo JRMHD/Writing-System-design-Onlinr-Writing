@@ -18,7 +18,7 @@
                         Bid by {{ $bid->writer->name }}
                     </h2>
                     <p style="font-size: 1rem; color: #555; margin-bottom: 0.5rem;">
-                        <strong>Bid Amount:</strong> ${{ number_format($bid->amount, 2) }}
+                        <strong>Bid Amount:</strong> KES {{ number_format($bid->amount, 2) }}
                     </p>
                     <p style="font-size: 1rem; color: #555; margin-bottom: 0.5rem;">
                         <strong>Status:</strong>

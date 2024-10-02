@@ -1,16 +1,17 @@
 @extends('layouts.employer')
 
 @section('content')
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #F7F9FA; padding: 2rem;">
+    <div style="font-family: 'Poppins', sans-serif; background-color: #F7F9FA; padding: 2rem;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <!-- Page Title -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h1 style="font-size: 2.5rem; color: #333; margin: 0;">Your Assignments</h1>
+                <h1 style="font-size: 2.5rem; font-weight: 600; color: #333; margin: 0;">Your Assignments</h1>
                 <!-- Create New Assignment Button -->
                 <a href="{{ route('employer.assignments.create') }}" class="btn-create-assignment"
                     style="background-color: #00A86B; color: white; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 1rem; transition: background-color 0.3s ease;">
-                    + New Assignment
+                    <i class="fas fa-plus-circle" style="margin-right: 0.5rem;"></i> New Assignment
                 </a>
+
             </div>
 
             <!-- Success Message -->
@@ -23,7 +24,8 @@
 
             <!-- No Assignments Found -->
             @if ($assignments->isEmpty())
-                <p style="text-align: center; font-size: 1.25rem; color: #666;">No assignments found. Start by creating a new
+                <p style="text-align: center; font-size: 1.25rem; color: #666;">No assignments found. Start by creating a
+                    new
                     assignment.</p>
             @else
                 <!-- Assignments Table -->
@@ -34,7 +36,7 @@
                         <thead>
                             <tr style="background-color: #f4f4f4;">
                                 <th style="padding: 1rem; text-align: left; font-weight: 500; color: #333;">Title</th>
-                                <th style="padding: 1rem; text-align: left; font-weight: 500; color: #333;">Word Count</th>
+                                <th style="padding: 1rem; text-align: left; font-weight: 500; color: #333;">Topic</th>
                                 <th style="padding: 1rem; text-align: left; font-weight: 500; color: #333;">Deadline</th>
                                 <th style="padding: 1rem; text-align: left; font-weight: 500; color: #333;">Budget</th>
                                 <th style="padding: 1rem; text-align: center; font-weight: 500; color: #333;">Actions</th>
@@ -44,9 +46,9 @@
                             @foreach ($assignments as $assignment)
                                 <tr style="border-bottom: 1px solid #e0e0e0;">
                                     <td style="padding: 1.25rem;">{{ $assignment->title }}</td>
-                                    <td style="padding: 1.25rem;">{{ $assignment->word_count }}</td>
+                                    <td style="padding: 1.25rem;">{{ $assignment->topic }}</td>
                                     <td style="padding: 1.25rem;">{{ $assignment->deadline }}</td>
-                                    <td style="padding: 1.25rem;">${{ number_format($assignment->budget, 2) }}</td>
+                                    <td style="padding: 1.25rem;">KES {{ number_format($assignment->budget, 2) }}</td>
                                     <td style="padding: 1.25rem; text-align: center;">
                                         <!-- Action Buttons -->
                                         <div style="display: flex; justify-content: center; gap: 0.5rem;">

@@ -17,6 +17,10 @@ class Assignment extends Model
         'word_count',
         'deadline',
         'budget',
+        'language',           // New field
+        'academic_level',     // New field
+        'topic',              // New field
+        'file',               // New field
     ];
 
     protected $casts = [
@@ -64,7 +68,6 @@ class Assignment extends Model
     {
         return $this->hasOne(Bid::class)->where('status', 'accepted');
     }
-
 
     // Add any other relationships or methods as necessary
 }

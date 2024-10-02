@@ -56,7 +56,7 @@
                                 <h3 style="color: #14a800; font-size: 16px; margin: 0 0 10px 0;">
                                     {{ $bid->assignment->title }}</h3>
                                 <p style="color: #14a800; font-size: 14px; margin: 0 0 5px 0;">Bid:
-                                    ${{ number_format($bid->amount, 2) }}</p>
+                                    KES {{ number_format($bid->amount, 2) }}</p>
                                 <p
                                     style="font-weight: bold; font-size: 14px; margin: 0 0 5px 0; color: {{ $bid->status == 'accepted' ? '#14a800' : ($bid->status == 'pending' ? '#FF5722' : '#d14836') }};">
                                     Status: {{ ucfirst($bid->status) }}

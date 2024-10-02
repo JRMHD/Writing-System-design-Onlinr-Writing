@@ -3,10 +3,9 @@
 
 <head>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{ Auth::user()->name }} Employer Dashboard</title>
+    <title>{{ Auth::user()->name }} Employer Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -185,6 +184,14 @@
             color: var(--green);
             margin-bottom: 1rem;
             font-size: 2rem;
+            font-weight: 600;
+            /* Semibold */
+        }
+
+        .dashboard-card p {
+            font-size: 1rem;
+            font-weight: 400;
+            /* Regular */
         }
 
         .footer {
@@ -290,9 +297,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/employer/assignments/create" class="nav-link">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Create Assignments</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="/employer/given-out-assignments" class="nav-link">
                         <i class="fas fa-briefcase"></i>
-                        <span>Active Assignments</span>
+                        <span>Active Orders</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -302,7 +316,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-comments"></i>
                         <span>Messages</span>
                     </a>
@@ -341,10 +355,10 @@
                 <h2>Welcome, {{ Auth::user()->name }}!</h2>
                 <p>Here you can manage your assignments, view bids, and handle payments.</p>
             </div>
-            {{-- @if ($employer->profile_completion < 70)
+            {{-- Uncomment below to enable profile completion warning
+            @if ($employer->profile_completion < 70)
                 <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
-                    <p>Your profile is incomplete. Please <a href="{{ route('employer.profile') }}">complete your
-                            profile</a>.</p>
+                    <p>Your profile is incomplete. Please <a href="{{ route('employer.profile') }}">complete your profile</a>.</p>
                 </div>
             @endif --}}
             @yield('content')
