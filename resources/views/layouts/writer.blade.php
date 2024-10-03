@@ -250,8 +250,8 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
-                <img src="/images/logo.png" alt="Logo" style="width: 40px; height: auto;">
-                Uvo Writers
+                <img src="/images/logo.png" alt="Logo" style="width: 200px; height: auto;">
+                {{-- Uvo Writers --}}
             </a>
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>

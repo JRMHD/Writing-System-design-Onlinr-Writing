@@ -1,7 +1,7 @@
 @extends('layouts.employer')
 
 @section('content')
-    <div style="font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <div style="font-family: 'Poppins', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #14a800; font-size: 24px; margin-bottom: 20px;">Assignments with Bids</h1>
         <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow: hidden;">
             <table style="width: 100%; border-collapse: collapse;">

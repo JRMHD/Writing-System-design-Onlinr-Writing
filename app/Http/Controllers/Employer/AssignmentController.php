@@ -212,4 +212,12 @@ class AssignmentController extends Controller
 
         return redirect()->route('employer.assignments.given-out')->withErrors(['error' => 'No accepted bid for this assignment.']);
     }
+
+    public function showWriters()
+    {
+        // Fetch all writers
+        $writers = Writer::all();
+
+        return view('employer.writers.index', compact('writers'));
+    }
 }

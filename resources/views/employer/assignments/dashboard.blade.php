@@ -1,7 +1,7 @@
 @extends('layouts.employer')
 
 @section('content')
-    <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 2rem;">
+    <div style="font-family: 'Poppins', sans-serif; background-color: #f8f9fa; padding: 2rem;">
 
         <!-- Welcome Message -->
         <div

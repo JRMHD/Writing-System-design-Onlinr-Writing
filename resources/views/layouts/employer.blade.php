@@ -305,8 +305,14 @@
 
                 <li class="nav-item">
                     <a href="/employer/given-out-assignments" class="nav-link">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-file-alt"></i>
                         <span>Active Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/employer/writers" class="nav-link">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Writers</span>
                     </a>
                 </li>
                 <li class="nav-item">

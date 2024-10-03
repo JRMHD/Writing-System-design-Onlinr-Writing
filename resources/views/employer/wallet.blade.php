@@ -1,7 +1,7 @@
 @extends('layouts.employer')
 
 @section('content')
-    <div style="font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+    <div style="font-family: 'Poppins', sans-serif; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
         <!-- Page Title -->
         <h1 style="color: #14a800; font-size: 36px; margin-bottom: 30px;">Employer Wallet</h1>
 

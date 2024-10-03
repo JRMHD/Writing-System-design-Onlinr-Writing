@@ -188,3 +188,12 @@ Route::prefix('writer')->name('writer.')->middleware('auth:writer')->group(funct
     Route::get('/balance', [WriterPaymentController::class, 'showBalance'])->name('balance.show');
     Route::post('/withdraw', [WithdrawalController::class, 'requestWithdrawal'])->name('withdraw');
 });
+
+
+Route::middleware(['auth:employer'])->group(function () {
+    // Existing routes
+    Route::get('/employer/assignments', [AssignmentController::class, 'index'])->name('employer.assignments.index');
+
+    // New route for displaying available writers
+    Route::get('/employer/writers', [AssignmentController::class, 'showWriters'])->name('employer.writers.index');
+});

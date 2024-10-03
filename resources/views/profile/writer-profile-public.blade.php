@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f2f2f2;
             margin: 0;
             padding: 0;
@@ -139,7 +139,11 @@
     </header>
     <div class="container">
         <div class="profile-header">
-            {{-- <img src="/api/placeholder/120/120" alt="{{ $writer->name }}" class="profile-image"> --}}
+            <!-- Display the writer's profile image or fallback to a default image -->
+            <img src="{{ $writer->profile_image ? asset('storage/' . $writer->profile_image) : asset('images/default-profile.jpg') }}"
+                alt="{{ $writer->name }}" class="profile-image">
+
+
             <div class="profile-info">
                 <h1>{{ $writer->name }}</h1>
                 <p>{{ $writer->bio }}</p>
@@ -166,5 +170,6 @@
         <a href="/" class="back-link">Back to Home</a>
     </div>
 </body>
+
 
 </html>

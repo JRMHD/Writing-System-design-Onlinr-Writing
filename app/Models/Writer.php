@@ -55,4 +55,19 @@ class Writer extends Authenticatable
     {
         return $this->hasMany(Rating::class);
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+    public function employers()
+    {
+        return $this->belongsToMany(Employer::class)->withPivot('status');
+    }
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class);
+    }
+    
 }

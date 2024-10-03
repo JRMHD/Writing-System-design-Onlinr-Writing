@@ -1,7 +1,7 @@
 @extends('layouts.writer')
 
 @section('content')
-    <div style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
+    <div style="font-family: 'Poppins', sans-serif; background-color: #f2f2f2; padding: 20px;">
         <!-- Header -->
         <div
             style="background-color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">

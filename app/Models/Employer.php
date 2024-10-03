@@ -58,4 +58,9 @@ class Employer extends Authenticatable
     {
         return $this->wallet ? $this->wallet->balance : 0;
     }
+
+    public function writers()
+    {
+        return $this->belongsToMany(Writer::class)->withPivot('status');
+    }
 }
