@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Writer;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WithdrawalNotification;
 use App\Models\Withdrawal;
 use App\Models\Writer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail; // Import Mail facade
 
 class WithdrawalController extends Controller
 {
@@ -55,6 +57,9 @@ class WithdrawalController extends Controller
 
         // Update the writer's balance
         Writer::where('id', $writer->id)->decrement('balance', $amount);
+
+        // Send email notification to the writer
+        Mail::to($writer->email)->send(new WithdrawalNotification($writer, $amount));
 
         return response()->json([
             'success' => true,

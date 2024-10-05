@@ -1,34 +1,103 @@
 @extends('layouts.writer')
-
 @section('title', 'My Bids')
-
 @section('content')
-    <div style="max-width: 1200px; margin: auto; padding: 2rem;">
-        <h1 style="font-size: 2.5rem; font-weight: bold; color: #333; margin-bottom: 2rem;">My Bids</h1>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .bid-card {
+            background-color: #fff;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .bid-amount {
+            font-weight: 500;
+            color: #14a800;
+        }
+
+        .status-label {
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .status-accepted {
+            background-color: #e7f8ed;
+            color: #14a800;
+        }
+
+        .status-rejected {
+            background-color: #ffefef;
+            color: #d93025;
+        }
+
+        .status-pending {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .status-inprogress {
+            background-color: #e8eaed;
+            color: #5f6368;
+        }
+    </style>
+
+    <div style="max-width: 800px; margin: auto; padding: 1.5rem;">
+        <h1 style="color: #333; margin-bottom: 1.5rem;">My Proposols</h1>
 
         @foreach ($bids as $bid)
-            <div
-                style="background-color: #fff; border: 1px solid #e1e1e1; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                <h2 style="font-size: 1.75rem; font-weight: 600; color: #333; margin-bottom: 1rem;">
-                    {{ $bid->assignment->title }}</h2>
-                <p style="color: #555; margin-bottom: 0.75rem;"><strong>Bid Amount:</strong>
-                    ${{ number_format($bid->amount, 2) }}</p>
-                <p style="color: #555; margin-bottom: 0.75rem;"><strong>Submitted:</strong>
-                    {{ $bid->created_at->format('M d, Y H:i') }}</p>
-                <p style="margin-bottom: 1rem; font-weight: 600;">
+            <div class="bid-card">
+                <h2 style="color: #333; margin-bottom: 0.75rem;">
+                    <i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>
+                    {{ $bid->assignment->title }}
+                </h2>
+                <p style="color: #555; margin-bottom: 0.5rem;">
+                    <strong>Bid Amount:</strong>
+                    <span class="bid-amount">KES {{ number_format($bid->amount, 2) }}</span>
+                </p>
+                <p style="color: #555; margin-bottom: 0.5rem;">
+                    <i class="far fa-clock" style="margin-right: 0.5rem;"></i>
+                    <strong>Submitted:</strong>
+                    {{ $bid->created_at->format('M d, Y H:i') }}
+                </p>
+                <p style="margin-bottom: 0.75rem;">
                     <strong>Status:</strong>
-                    @if ($bid->status === 'accepted')
-                        <span style="color: #28a745;">Accepted</span> <!-- Green for accepted -->
-                    @elseif ($bid->status === 'rejected')
-                        <span style="color: #dc3545;">Rejected</span> <!-- Red for rejected -->
-                    @elseif ($bid->status === 'pending')
-                        <span style="color: #ffc107;">Pending</span> <!-- Yellow for pending -->
-                    @else
-                        <span style="color: #6c757d;">In-progress</span> <!-- Gray for unknown -->
-                    @endif
+                    <span class="status-label status-{{ $bid->status }}">
+                        @if ($bid->status === 'accepted')
+                            Accepted
+                        @elseif ($bid->status === 'rejected')
+                            Rejected
+                        @elseif ($bid->status === 'pending')
+                            Pending
+                        @else
+                            In-progress
+                        @endif
+                    </span>
                 </p>
                 @if ($bid->message)
-                    <p style="color: #555; margin-top: 1rem;"><strong>Message:</strong> {{ $bid->message }}</p>
+                    <p style="color: #555; margin-top: 0.75rem;">
+                        <i class="fas fa-comment" style="margin-right: 0.5rem;"></i>
+                        <strong>Message:</strong> {{ $bid->message }}
+                    </p>
                 @endif
             </div>
         @endforeach

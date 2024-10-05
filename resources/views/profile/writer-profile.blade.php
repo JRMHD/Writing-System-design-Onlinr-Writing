@@ -11,7 +11,7 @@
 
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f7f9fc;
             margin: 0;
             padding: 0;

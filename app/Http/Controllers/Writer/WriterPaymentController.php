@@ -21,9 +21,9 @@ class WriterPaymentController extends Controller
     {
         $writer = Auth::user();
 
-        // Retrieve payments and withdrawals
-        $payments = $writer->payments; // Use the relationship method
-        $withdrawals = $writer->withdrawals; // Use the relationship method
+        // Retrieve payments and withdrawals and sort them by created_at in descending order
+        $payments = $writer->payments->sortByDesc('created_at');
+        $withdrawals = $writer->withdrawals->sortByDesc('created_at');
 
         return view('writer.balance', compact('writer', 'payments', 'withdrawals'));
     }

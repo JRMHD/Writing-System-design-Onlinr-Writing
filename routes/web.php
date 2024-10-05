@@ -17,9 +17,9 @@ use App\Http\Controllers\Employer\EmployerWalletController;
 use App\Http\Controllers\Employer\DepositController;
 use App\Http\Controllers\EmployerProfileController;
 use App\Http\Controllers\WriterProfileController;
-use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\EmployerSubscriptionController;
 use App\Http\Controllers\RatingController;
-
+use App\Http\Controllers\SubscriptionController;
 
 
 /*
@@ -121,6 +121,10 @@ Route::middleware(['auth:writer'])->group(function () {
     Route::get('/writer/profile', [WriterProfileController::class, 'show'])->name('writer.profile');
     Route::post('/writer/profile/update', [WriterProfileController::class, 'update'])->name('writer.profile.update');
     Route::post('/writer-logout', [WriterAuthController::class, 'logout'])->name('writer.logout');
+
+    Route::get('/subscriptions/plans', [SubscriptionController::class, 'showPlans'])->name('subscriptions.plans');
+    Route::post('/subscriptions/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscriptions.subscribe');
+    Route::get('/subscriptions/active', [SubscriptionController::class, 'activeSubscriptions'])->name('subscriptions.active');
 });
 
 require __DIR__ . '/auth.php';
@@ -196,4 +200,13 @@ Route::middleware(['auth:employer'])->group(function () {
 
     // New route for displaying available writers
     Route::get('/employer/writers', [AssignmentController::class, 'showWriters'])->name('employer.writers.index');
+});
+
+
+
+
+Route::middleware(['auth:employer'])->group(function () {
+    Route::get('employer/subscriptions/plans', [EmployerSubscriptionController::class, 'showPlans'])->name('employer.subscriptions.plans');
+    Route::post('employer/subscriptions/subscribe', [EmployerSubscriptionController::class, 'subscribe'])->name('employer.subscriptions.subscribe');
+    Route::get('employer/subscriptions/active', [EmployerSubscriptionController::class, 'activeSubscriptions'])->name('employer.subscriptions.active');
 });

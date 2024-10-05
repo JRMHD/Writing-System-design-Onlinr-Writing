@@ -69,5 +69,8 @@ class Writer extends Authenticatable
     {
         return $this->hasMany(Bid::class);
     }
-    
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

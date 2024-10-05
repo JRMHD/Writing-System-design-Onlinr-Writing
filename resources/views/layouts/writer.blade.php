@@ -285,6 +285,19 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/subscriptions/plans" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Subscription</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/subscriptions/active" class="nav-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Active Subscription</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="/writer/balance" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Payments</span>
@@ -314,9 +327,16 @@
         </header>
 
         <main class="content">
-            <div class="dashboard-card">
-                <h2>Welcome, {{ Auth::user()->name }}!</h2>
-                <p>Enjoy Your Writers Dashboard.</p>
+            <div class="dashboard-card" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>Welcome, {{ Auth::user()->name }}!</h2>
+                    <p>Enjoy Your Writers Dashboard.</p>
+                </div>
+                <a href="/subscriptions/plans" class="btn-subscription"
+                    style="display: flex; align-items: center; text-decoration: none; color: var(--white); background-color: var(--green); padding: 0.5rem 1rem; border-radius: 0.5rem;">
+                    <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                    Subscription
+                </a>
             </div>
 
             @if (isset($writer) && $writer->profile_completion < 70)
@@ -328,6 +348,7 @@
 
             @yield('content')
         </main>
+
 
         <footer class="footer">
             © <span id="currentYear"></span> Uvo Writers. All rights reserved. | Developed by <a

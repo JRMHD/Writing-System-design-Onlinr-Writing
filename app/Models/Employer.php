@@ -63,4 +63,9 @@ class Employer extends Authenticatable
     {
         return $this->belongsToMany(Writer::class)->withPivot('status');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(EmployerSubscription::class);
+    }
 }

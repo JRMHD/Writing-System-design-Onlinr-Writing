@@ -328,6 +328,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/employer/subscriptions/plans" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Subscription</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/employer/subscriptions/active" class="nav-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Active Subscription</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/wallet" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Wallet</span>
@@ -357,18 +369,21 @@
         </header>
 
         <main class="content">
-            <div class="dashboard-card">
-                <h2>Welcome, {{ Auth::user()->name }}!</h2>
-                <p>Here you can manage your assignments, view bids, and handle payments.</p>
-            </div>
-            {{-- Uncomment below to enable profile completion warning
-            @if ($employer->profile_completion < 70)
-                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
-                    <p>Your profile is incomplete. Please <a href="{{ route('employer.profile') }}">complete your profile</a>.</p>
+            <div class="dashboard-card" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>Welcome, {{ Auth::user()->name }}!</h2>
+                    <p>Here you can manage your assignments, view bids, and handle payments.</p>
                 </div>
-            @endif --}}
+                <a href="/subscriptions/plans" class="btn-subscription"
+                    style="display: flex; align-items: center; text-decoration: none; color: var(--white); background-color: var(--green); padding: 0.5rem 1rem; border-radius: 0.5rem;">
+                    <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                    Subscription
+                </a>
+            </div>
+
             @yield('content')
         </main>
+
 
         <footer class="footer">
             © <span id="currentYear"></span> Uvo Writers. All rights reserved. | Developed by <a

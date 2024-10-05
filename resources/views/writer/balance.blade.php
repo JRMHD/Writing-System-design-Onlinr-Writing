@@ -1,41 +1,43 @@
 @extends('layouts.writer')
 
 @section('content')
-    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px;">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <div style="font-family: 'Poppins', sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px;">
         <!-- Page Title -->
-        <h1 style="color: #14a800; font-size: 32px; margin-bottom: 30px;">Writer Balance</h1>
+        <h1 style="color: #14a800; font-size: 24px; margin-bottom: 30px; font-weight: 600;">Writer Balance</h1>
 
         <!-- Success and Error Messages -->
         @if (session('success'))
             <div
-                style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; padding: 15px; margin-bottom: 20px;">
-                {{ session('success') }}
+                style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; padding: 15px; margin-bottom: 20px; font-weight: 400; font-size: 20px;">
+                <i class="fas fa-check-circle" style="margin-right: 8px;"></i>{{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
             <div
-                style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; padding: 15px; margin-bottom: 20px;">
-                {{ session('error') }}
+                style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; padding: 15px; margin-bottom: 20px; font-weight: 400; font-size: 20px;">
+                <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>{{ session('error') }}
             </div>
         @endif
 
         <!-- Balance Overview -->
         <div style="background-color: #f2f7f2; border-radius: 8px; padding: 30px; margin-bottom: 40px;">
-            <h2 style="color: #001e00; font-size: 24px; margin-bottom: 20px;">Balance Overview</h2>
-            <p style="font-size: 18px; margin-bottom: 15px;">Current Balance: <strong
-                    style="color: #14a800; font-size: 24px;">KES {{ number_format($writer->balance, 2) }}</strong></p>
-            <p style="color: #656565; margin-bottom: 20px;">This is the amount available for withdrawal. Payments are
-                typically processed within 1-3 business days.</p>
+            <h2 style="color: #001e00; font-size: 25px; margin-bottom: 20px; font-weight: 600;">Balance Overview</h2>
+            <p style="font-size: 20px; margin-bottom: 15px; font-weight: 400;">Current Balance: <strong
+                    style="color: #14a800; font-size: 25px; font-weight: 600;">KES
+                    {{ number_format($writer->balance, 2) }}</strong></p>
+            <p style="color: #656565; margin-bottom: 20px; font-size: 15px; font-weight: 400;">This is the amount available
+                for withdrawal. Payments are typically processed within 1-3 business days.</p>
         </div>
 
         <!-- Request a Withdrawal -->
         <div
             style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 40px;">
-            <h2 style="color: #001e00; font-size: 24px; margin-bottom: 20px;">Request a Withdrawal</h2>
+            <h2 style="color: #001e00; font-size: 25px; margin-bottom: 20px; font-weight: 600;">Request a Withdrawal</h2>
             <button id="withdrawButton"
-                style="background-color: #14a800; color: #fff; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background-color 0.3s;">
-                Withdraw Funds
+                style="background-color: #14a800; color: #fff; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 20px; transition: background-color 0.3s;">
+                <i class="fas fa-dollar-sign" style="margin-right: 8px;"></i>Withdraw Funds
             </button>
         </div>
 
@@ -46,24 +48,24 @@
                 style="background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 40px; width: 90%; max-width: 500px; position: relative;">
                 <button id="closeWithdrawalModal"
                     style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
-                <h2 style="color: #001e00; font-size: 26px; margin-bottom: 20px;">Withdraw Funds</h2>
+                <h2 style="color: #001e00; font-size: 26px; margin-bottom: 20px; font-weight: 600;">Withdraw Funds</h2>
                 <form id="withdrawalForm">
                     @csrf
                     <div style="margin-bottom: 20px;">
                         <label for="withdraw_amount"
-                            style="display: block; margin-bottom: 8px; color: #001e00; font-weight: bold;">Amount to
+                            style="display: block; margin-bottom: 8px; color: #001e00; font-weight: 600;">Amount to
                             withdraw:</label>
                         <div style="display: flex; align-items: center;">
                             <span
-                                style="background-color: #e4ebe4; padding: 10px; border: 1px solid #ccc; border-right: none; border-radius: 4px 0 0 4px; font-size: 18px;">KES</span>
+                                style="background-color: #e4ebe4; padding: 10px; border: 1px solid #ccc; border-right: none; border-radius: 4px 0 0 4px; font-size: 20px;">KES</span>
                             <input type="number" step="0.01" name="amount" id="withdraw_amount" required
-                                style="flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 0 4px 4px 0; font-size: 16px;">
+                                style="flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 0 4px 4px 0; font-size: 15px;">
                         </div>
                         <span id="withdrawAmountError" style="color: red; font-size: 14px;"></span>
                     </div>
                     <button type="submit"
-                        style="background-color: #14a800; color: #fff; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 18px; width: 100%; transition: background-color 0.3s;">
-                        Request Withdrawal
+                        style="background-color: #14a800; color: #fff; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 20px; width: 100%; transition: background-color 0.3s;">
+                        <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Request Withdrawal
                     </button>
                 </form>
 
@@ -74,7 +76,7 @@
                             style="border: 4px solid #f3f3f3; border-top: 4px solid #14a800; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;">
                         </div>
                     </div>
-                    <p style="color: #656565; margin-top: 10px;">Processing...</p>
+                    <p style="color: #656565; margin-top: 10px; font-weight: 400; font-size: 15px;">Processing...</p>
                 </div>
 
                 <!-- Result Message -->
@@ -88,12 +90,12 @@
         <!-- Recent Payments -->
         <div
             style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 40px;">
-            <h2 style="color: #001e00; font-size: 24px; margin-bottom: 20px;">Payment History</h2>
+            <h2 style="color: #001e00; font-size: 25px; margin-bottom: 20px; font-weight: 600;">Payment History</h2>
             <ul style="list-style-type: none; padding: 0;">
                 @forelse($payments as $payment)
                     <li
                         style="border-bottom: 1px solid #e4ebe4; padding: 15px 0; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #001e00;">{{ $payment->created_at->format('Y-m-d') }}</span>
+                        <span style="color: #001e00; font-weight: 400;">{{ $payment->created_at->format('Y-m-d') }}</span>
                         <span style="color: #14a800; font-weight: bold;">+KES
                             {{ number_format($payment->amount, 2) }}</span>
                     </li>
@@ -105,12 +107,15 @@
 
         <!-- Recent Withdrawals -->
         <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 30px;">
-            <h2 style="color: #001e00; font-size: 24px; margin-bottom: 20px;">Withdrawal History</h2>
+            <h2 style="color: #001e00; font-size: 25px; margin-bottom: 20px; font
+            <h2 style="color: #001e00;
+                font-size: 25px; margin-bottom: 20px; font-weight: 600;">Withdrawal History</h2>
             <ul style="list-style-type: none; padding: 0;">
                 @forelse($withdrawals as $withdrawal)
                     <li
                         style="border-bottom: 1px solid #e4ebe4; padding: 15px 0; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #001e00;">{{ $withdrawal->created_at->format('Y-m-d') }}</span>
+                        <span
+                            style="color: #001e00; font-weight: 400;">{{ $withdrawal->created_at->format('Y-m-d') }}</span>
                         <span style="color: #656565; font-weight: bold;">-KES
                             {{ number_format($withdrawal->amount, 2) }}</span>
                     </li>
@@ -233,7 +238,6 @@
 
             // Open Withdrawal Modal
             withdrawButton.addEventListener('click', () => {
-                // Check if the writer has sufficient balance before opening the modal
                 const currentBalance = parseFloat("{{ $writer->balance }}");
                 if (currentBalance <= 0) {
                     alert('You do not have sufficient balance to make a withdrawal.');
@@ -273,7 +277,7 @@
                 let hasError = false;
                 if (amount < 0.01) {
                     document.getElementById('withdrawAmountError').innerText =
-                        'Amount must be at least $0.01.';
+                        'Amount must be at least KES 0.01.';
                     hasError = true;
                 }
                 if (parseFloat(amount) > parseFloat("{{ $writer->balance }}")) {
@@ -285,8 +289,6 @@
 
                 // Show processing animation
                 withdrawProcessing.style.display = 'block';
-
-                // Show loader overlay
                 showLoader();
 
                 // Send AJAX request
@@ -315,7 +317,6 @@
                         if (data.success) {
                             withdrawSuccessMessage.innerText = data.message;
                             withdrawResultMessage.style.display = 'block';
-                            // Optionally, refresh the balance and withdrawal history after a delay
                             setTimeout(() => {
                                 location.reload();
                             }, 3000);
@@ -327,12 +328,8 @@
                     .catch(error => {
                         hideLoader();
                         withdrawProcessing.style.display = 'none';
-                        if (error.message) {
-                            withdrawErrorMessage.innerText = error.message;
-                        } else {
-                            withdrawErrorMessage.innerText =
-                                'An unexpected error occurred. Please try again.';
-                        }
+                        withdrawErrorMessage.innerText = error.message ||
+                            'An unexpected error occurred. Please try again.';
                         withdrawResultMessage.style.display = 'block';
                     });
             });

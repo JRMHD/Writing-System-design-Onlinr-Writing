@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Bid;
 use App\Models\Assignment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail; // Import Mail facade
+use App\Mail\BidAcceptedNotification; // Import the mailable class
 
 class BidController extends Controller
 {
@@ -161,6 +163,12 @@ class BidController extends Controller
         $bid = Bid::findOrFail($id);
         $bid->status = $status;
         $bid->save();
+
+        // Send email if the bid is accepted
+        if ($status === 'accepted') {
+            $writer = $bid->writer;
+            Mail::to($writer->email)->send(new BidAcceptedNotification($writer, $bid));
+        }
 
         return redirect()->back()->with('success', 'Bid status updated successfully.');
     }
