@@ -210,3 +210,18 @@ Route::middleware(['auth:employer'])->group(function () {
     Route::post('employer/subscriptions/subscribe', [EmployerSubscriptionController::class, 'subscribe'])->name('employer.subscriptions.subscribe');
     Route::get('employer/subscriptions/active', [EmployerSubscriptionController::class, 'activeSubscriptions'])->name('employer.subscriptions.active');
 });
+
+
+// Registration Routes
+Route::get('/writer/register', [WriterAuthController::class, 'showRegistrationForm'])->name('writer.register.form');
+Route::post('/writer/register', [WriterAuthController::class, 'register'])->name('writer.register');
+
+// Verification Routes
+Route::get('/writer/register/verification-sent', [WriterAuthController::class, 'verificationSent'])->name('writer.register.verification-sent');
+Route::get('/writer/verify/{token}', [WriterAuthController::class, 'verify'])->name('writer.verify');
+Route::post('/writer/process-payment', [WriterAuthController::class, 'processPayment'])->name('writer.process-payment');
+
+// Employer Verification Routes
+Route::get('/employer/register/verification-sent', [EmployerAuthController::class, 'verificationSent'])->name('employer.register.verification-sent');
+Route::get('/employer/verify/{token}', [EmployerAuthController::class, 'verify'])->name('employer.verify');
+Route::post('/employer/process-payment', [EmployerAuthController::class, 'processPayment'])->name('employer.process-payment');

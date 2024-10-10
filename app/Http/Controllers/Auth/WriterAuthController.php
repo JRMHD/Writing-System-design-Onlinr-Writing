@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Writer;
+use App\Models\WriterVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,16 +12,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\CustomResetPasswordMail;
+use App\Mail\WriterVerificationMail;
 
 class WriterAuthController extends Controller
 {
-    // Show Writer Login Form
+    /**
+     * Show the Writer Login Form
+     */
     public function showLoginForm()
     {
         return view('auth.writer-login');
     }
 
-    // Handle Writer Login
+    /**
+     * Handle Writer Login
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -38,35 +44,106 @@ class WriterAuthController extends Controller
         ])->withInput();
     }
 
-    // Show Writer Registration Form
+    /**
+     * Show the Writer Registration Form
+     */
     public function showRegistrationForm()
     {
         return view('auth.writer-register');
     }
 
-    // Handle Writer Registration
+    /**
+     * Handle Writer Registration
+     */
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:writers',
+            'email' => 'required|string|email|max:255|unique:writers|unique:writer_verifications',
             'password' => 'required|string|confirmed|min:8',
             'phone' => 'required|string|max:15',
         ]);
 
-        Writer::create([
+        // Generate a unique verification token
+        $token = Str::random(60);
+
+        // Store the writer's details in the writer_verifications table
+        WriterVerification::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
+            'token' => $token,
         ]);
 
-        Auth::guard('writer')->attempt($request->only('email', 'password'));
+        // Send the verification email
+        Mail::to($request->email)->send(new WriterVerificationMail($token));
 
-        return redirect()->route('writer.dashboard')->with('success', 'Registration successful! Welcome aboard.');
+        // Redirect to the verification sent page
+        return redirect()->route('writer.register.verification-sent');
     }
 
-    // Handle Writer Logout
+    /**
+     * Show Verification Sent Page
+     */
+    public function verificationSent()
+    {
+        return view('auth.writer-verification-sent');
+    }
+
+    /**
+     * Handle Verification Link Click
+     */
+    public function verify($token)
+    {
+        // Find the verification record by token
+        $verification = WriterVerification::where('token', $token)->first();
+
+        if (!$verification) {
+            return redirect()->route('writer.login')->withErrors(['token' => 'Invalid verification token.']);
+        }
+
+        // Show the payment page
+        return view('auth.writer-payment', ['verification' => $verification]);
+    }
+
+    /**
+     * Process Payment and Finalize Registration
+     */
+    public function processPayment(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|exists:writer_verifications,token',
+        ]);
+
+        // Find the verification record by token
+        $verification = WriterVerification::where('token', $request->token)->first();
+
+        if (!$verification) {
+            return redirect()->route('writer.login')->withErrors(['token' => 'Invalid token.']);
+        }
+
+        // TODO: Integrate MPESA STK Push here
+        // For now, simulate successful payment
+
+        // Move the writer's data to the writers table
+        Writer::create([
+            'name' => $verification->name,
+            'email' => $verification->email,
+            'password' => $verification->password, // Already hashed
+            'phone' => $verification->phone,
+        ]);
+
+        // Delete the verification record
+        $verification->delete();
+
+        // Redirect to the login page with a success message
+        return redirect()->route('writer.login')->with('success', 'Your account has been activated! You can now log in.');
+    }
+
+    /**
+     * Handle Writer Logout
+     */
     public function logout(Request $request)
     {
         Auth::guard('writer')->logout();
@@ -75,13 +152,17 @@ class WriterAuthController extends Controller
         return redirect('/writer/login')->with('success', 'You have been logged out successfully.');
     }
 
-    // Show Password Reset Request Form
+    /**
+     * Show Password Reset Request Form
+     */
     public function showPasswordResetRequestForm()
     {
         return view('auth.writer-password-request');
     }
 
-    // Send Password Reset Link
+    /**
+     * Send Password Reset Link
+     */
     public function sendPasswordResetLink(Request $request)
     {
         $request->validate([
@@ -105,7 +186,9 @@ class WriterAuthController extends Controller
         return back()->with('status', 'We have emailed your password reset link!');
     }
 
-    // Show Password Reset Form
+    /**
+     * Show Password Reset Form
+     */
     public function showPasswordResetForm(Request $request, $token)
     {
         return view('auth.writer-password-reset', [
@@ -114,8 +197,9 @@ class WriterAuthController extends Controller
         ]);
     }
 
-
-    // Handle Password Reset
+    /**
+     * Handle Password Reset
+     */
     public function resetPassword(Request $request)
     {
         $request->validate([
