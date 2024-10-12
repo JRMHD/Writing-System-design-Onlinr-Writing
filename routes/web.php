@@ -21,6 +21,7 @@ use App\Http\Controllers\EmployerSubscriptionController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SubscriptionController;
 
+use App\Http\Controllers\Employer\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -225,3 +226,8 @@ Route::post('/writer/process-payment', [WriterAuthController::class, 'processPay
 Route::get('/employer/register/verification-sent', [EmployerAuthController::class, 'verificationSent'])->name('employer.register.verification-sent');
 Route::get('/employer/verify/{token}', [EmployerAuthController::class, 'verify'])->name('employer.verify');
 Route::post('/employer/process-payment', [EmployerAuthController::class, 'processPayment'])->name('employer.process-payment');
+
+// routes/web.php
+Route::middleware(['auth:employer'])->group(function () {
+    Route::get('/employer/dashboard', [DashboardController::class, 'index'])->name('employer.dashboard');
+});

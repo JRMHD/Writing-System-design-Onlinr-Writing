@@ -340,7 +340,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/wallet" class="nav-link">
+                    <a href="/employer/wallet" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Wallet</span>
                     </a>
