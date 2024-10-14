@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ Auth::user()->name }} Writers Dashboard</title>
+    <!-- Font Awesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -44,6 +46,8 @@
             top: 0;
             left: 0;
             height: 100%;
+            z-index: 1001;
+            /* Ensure sidebar is above other elements */
         }
 
         .sidebar-header {
@@ -140,6 +144,51 @@
             background-color: var(--light-green);
             border-radius: 2rem;
             padding: 0.5rem 1rem;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .middle-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            /* Increased gap between items */
+            flex: 2;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            /* Reduced the font size of the text */
+            color: var(--dark-gray);
+            position: relative;
+        }
+
+        .action-item .icon {
+            font-size: 0.9rem;
+            /* Reduced icon size */
+            color: var(--green);
+            margin-bottom: 0.2rem;
+            /* Reduced space below the icon */
+        }
+
+        .action-item .value {
+            font-size: 0.7rem;
+            /* Smaller font for values */
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+            /* Reduced space below the value */
+            display: flex;
+            align-items: center;
+        }
+
+        .action-item .label {
+            font-size: 0.6rem;
+            /* Smaller font for labels */
+            color: var(--dark-gray);
         }
 
         .search-bar input {
@@ -148,13 +197,70 @@
             margin-left: 0.5rem;
             font-size: 0.9rem;
             color: var(--dark-gray);
+            outline: none;
+        }
+
+        .middle-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            /* Increased gap between items */
+            flex: 2;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            /* Reduced the font size of the text */
+            color: var(--dark-gray);
+            position: relative;
+        }
+
+        .action-item .icon {
+            font-size: 0.9rem;
+            /* Reduced icon size */
+            color: var(--green);
+            margin-bottom: 0.2rem;
+            /* Reduced space below the icon */
+        }
+
+        .action-item .value {
+            font-size: 0.7rem;
+            /* Smaller font for values */
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+            /* Reduced space below the value */
+            display: flex;
+            align-items: center;
+        }
+
+        .action-item .label {
+            font-size: 0.6rem;
+            /* Smaller font for labels */
+            color: var(--dark-gray);
+        }
+
+
+        .toggle-balance {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .user-actions a {
             color: var(--green);
             text-decoration: none;
-            margin-left: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             transition: color 0.3s ease;
         }
 
@@ -164,7 +270,7 @@
 
         .content {
             padding: 2rem;
-            margin-top: 4rem;
+            margin-top: 4.5rem;
             flex-grow: 1;
         }
 
@@ -196,6 +302,21 @@
             text-align: center;
             padding: 1rem;
             font-size: 0.9rem;
+            position: relative;
+            /* Ensure footer is at the bottom */
+        }
+
+        .rating-stars {
+            display: inline-block;
+            color: gold;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1200px) {
+            .top-bar {
+                left: 0;
+                margin-left: 250px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -224,6 +345,10 @@
                 left: 0;
                 right: 0;
                 position: relative;
+                padding: 0.5rem 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
             }
 
             .menu-toggle {
@@ -238,10 +363,25 @@
                 display: block;
             }
 
+            .middle-actions {
+                display: none;
+                /* Hide middle actions on mobile for better space management */
+            }
+
             .user-actions {
                 display: flex;
                 justify-content: space-around;
+                width: 100%;
             }
+        }
+
+        /* Additional Styles for Toggle Balance Animation */
+        .action-item .toggle-balance {
+            transition: color 0.3s ease;
+        }
+
+        .action-item .toggle-balance.hidden {
+            color: var(--deep-orange);
         }
     </style>
 </head>
@@ -249,8 +389,8 @@
 <body>
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="logo">
-                <img src="/images/logo.png" alt="Logo" style="width: 200px; height: auto;">
+            <a href="/writer/dashboard" class="logo">
+                <img src="/images/logo.png" alt="Logo" style="width: 150px; height: auto;">
                 {{-- Uvo Writers --}}
             </a>
             <button class="menu-toggle" id="menuToggle">
@@ -269,7 +409,7 @@
                 <li class="nav-item">
                     <a href="/writer/assignments/" class="nav-link">
                         <i class="fas fa-clipboard-list"></i>
-                        <span>Available Assignments</span>
+                        <span>Available Orders</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -319,6 +459,48 @@
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Search...">
             </div>
+            <div class="middle-actions">
+                <div class="action-item">
+                    <div class="icon">
+                        <i class="fas fa-level-up-alt"></i>
+                    </div>
+                    <div class="value">Regular +</div>
+                    <div class="label">Level</div>
+                </div>
+                {{-- <div class="action-item">
+                    <div class="icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="value">
+                        <span id="balanceAmount">KES {{ number_format($writer->balance, 2) }}</span>
+                        <i class="fas fa-eye toggle-balance" id="toggleBalance" title="Hide Balance"></i>
+                    </div>
+                    <div class="label">Balance</div>
+                </div> --}}
+                {{-- <div class="action-item">
+                    <div class="icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="value">
+                        <span class="rating-stars">{{ number_format($averageRating, 1) }}</span> / 5
+                    </div>
+                    <div class="label">Rating</div>
+                </div> --}}
+                <div class="action-item">
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="value">100%</div>
+                    <div class="label">Success Rate</div>
+                </div>
+                <div class="action-item">
+                    <div class="icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <div class="value">Rate</div>
+                    <div class="label">Rating</div>
+                </div>
+            </div>
             <div class="user-actions">
                 <a href="#" title="Notifications"><i class="fas fa-bell"></i></a>
                 <a href="#" title="Messages"><i class="fas fa-envelope"></i></a>
@@ -349,26 +531,44 @@
             @yield('content')
         </main>
 
-
         <footer class="footer">
             © <span id="currentYear"></span> Uvo Writers. All rights reserved. | Developed by <a
                 href="https://www.jrmhd.tech" target="_blank" rel="noopener noreferrer">Jrmhd Technologies</a>
         </footer>
 
         <script>
+            // Update Current Year in Footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Toggle Sidebar on Mobile
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            menuToggle.addEventListener('click', () => {
+                document.querySelector('.sidebar').classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Toggle Balance Visibility
+            const toggleBalance = document.getElementById('toggleBalance');
+            const balanceAmount = document.getElementById('balanceAmount');
+
+            toggleBalance.addEventListener('click', () => {
+                if (balanceAmount.textContent.trim() !== '****') {
+                    // Hide Balance
+                    balanceAmount.textContent = '****';
+                    toggleBalance.classList.add('hidden');
+                    toggleBalance.title = 'Show Balance';
+                } else {
+                    // Show Balance
+                    {{-- balanceAmount.textContent = 'KES {{ number_format($writer->balance, 2) }}'; --}}
+                    toggleBalance.classList.remove('hidden');
+                    toggleBalance.title = 'Hide Balance';
+                }
+            });
         </script>
     </div>
 
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        menuToggle.addEventListener('click', () => {
-            document.querySelector('.sidebar').classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-    </script>
 </body>
 
 </html>

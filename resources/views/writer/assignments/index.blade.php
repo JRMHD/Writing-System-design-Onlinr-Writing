@@ -9,7 +9,7 @@
             <div
                 style="background-color: #ffffff; padding: 30px; border-radius: 16px; margin-bottom: 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
                 <h1 style="color: #14a800; font-size: 32px; font-weight: 700; margin: 0; letter-spacing: -0.5px;">Available
-                    Assignments</h1>
+                    Jobs</h1>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">

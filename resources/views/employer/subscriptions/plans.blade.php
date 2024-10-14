@@ -179,7 +179,7 @@
         <div class="plans-container">
             @foreach ($plans as $plan)
                 <div class="plan-card">
-                    <h2 class="plan-name">{{ $plan['name'] }} Plan</h2>
+                    <h2 class="plan-name">{{ $plan['name'] }} </h2>
                     <p class="plan-price">KES {{ $plan['price'] }} / {{ $plan['duration'] }}</p>
                     <h3 class="benefits-title">Benefits</h3>
                     <ul class="benefits-list">

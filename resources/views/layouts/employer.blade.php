@@ -85,7 +85,7 @@
         }
 
         .nav-item {
-            margin-bottom: 0.5rem;
+            position: relative;
         }
 
         .nav-link {
@@ -115,9 +115,7 @@
 
         .main-content {
             margin-left: 250px;
-            /* Sidebar width */
             margin-top: 60px;
-            /* Space for the top bar */
             flex-grow: 1;
             overflow-y: auto;
             display: flex;
@@ -134,7 +132,6 @@
             position: fixed;
             top: 0;
             left: 250px;
-            /* Sidebar width */
             right: 0;
             z-index: 1000;
         }
@@ -185,13 +182,11 @@
             margin-bottom: 1rem;
             font-size: 2rem;
             font-weight: 600;
-            /* Semibold */
         }
 
         .dashboard-card p {
             font-size: 1rem;
             font-weight: 400;
-            /* Regular */
         }
 
         .footer {
@@ -203,7 +198,29 @@
             position: relative;
             margin-top: auto;
             width: calc(100% - 250px);
-            /* Width of sidebar */
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            /* Space between items */
+        }
+
+        .level-info .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            /* Smaller font size */
+            color: var(--dark-gray);
+        }
+
+        .level-info .icon {
+            font-size: 1.2rem;
+            /* Adjust icon size */
+            color: var(--green);
         }
 
         @media (max-width: 768px) {
@@ -267,6 +284,35 @@
                 position: relative;
             }
         }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .new-badge {
+            background-color: #8e44ad;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 
@@ -274,9 +320,8 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo" style="display: inline-block; width: 150px; height: auto;">
-                <img src="/images/logo.png" alt="Logo" style="width: 150%; height: auto; display: block;">
+                <img src="/images/logo.png" alt="Logo" style="width: 120%; height: auto; display: block;">
             </a>
-
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -290,69 +335,117 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/employer/assignments" class="nav-link">
-                        <i class="fas fa-clipboard-list"></i>
-                        <span>View Assignments</span>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Orders</span>
+                        <i class="fas fa-chevron-down"></i>
                     </a>
+                    <ul class="dropdown-menu"
+                        style="list-style-type: none; padding: 10px; margin: 0; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                        <li style="margin-bottom: 8px;">
+                            <a href="/employer/assignments/create"
+                                style="text-decoration: none; color: green; font-weight: 600; padding: 10px 15px; display: block; border-radius: 5px; transition: color 0.3s ease;">
+                                New order
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <a href="/employer/assignments"
+                                style="text-decoration: none; color: green; font-weight: 600; padding: 10px 15px; display: block; border-radius: 5px; transition: color 0.3s ease;">
+                                My orders
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <a href="/employer/given-out-assignments"
+                                style="text-decoration: none; color: green; font-weight: 600; padding: 10px 15px; display: block; border-radius: 5px; transition: color 0.3s ease;">
+                                Active Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/employer/assignments-with-bids"
+                                style="text-decoration: none; color: green; font-weight: 600; padding: 10px 15px; display: block; border-radius: 5px; transition: color 0.3s ease;">
+                                Assignments with Bids
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Adding hover effect to change text color to purple -->
+                    <style>
+                        .dropdown-menu a:hover {
+                            color: purple;
+                        }
+                    </style>
+
                 </li>
+
                 <li class="nav-item">
-                    <a href="/employer/assignments/create" class="nav-link">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Create Assignments</span>
+                    <a href="/employer/wallet" class="nav-link">
+                        <i class="fas fa-wallet"></i>
+                        <span>Balance</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/employer/given-out-assignments" class="nav-link">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Active Orders</span>
+                    <a href="/employer/subscriptions/plans" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Subscriptions</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="/employer/writers" class="nav-link">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-users"></i>
                         <span>Writers</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/employer/assignments-with-bids" class="nav-link">
-                        <i class="fas fa-gavel"></i>
-                        <span>Assignments with Bids</span>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-comments"></i>
-                        <span>Messages</span>
+                        <span>Chats</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href="/employer/subscriptions/plans" class="nav-link">
-                        <i class="fas fa-bell"></i>
-                        <span>Subscription</span>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-calendar"></i>
+                        <span>Planner</span>
+                        <span class="new-badge">Soon</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/employer/subscriptions/active" class="nav-link">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Active Subscription</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/employer/wallet" class="nav-link">
-                        <i class="fas fa-wallet"></i>
-                        <span>Wallet</span>
-                    </a>
-                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <ul class="nav-links">
                 <li class="nav-item">
                     <a href="/employer/profile" class="nav-link">
                         <i class="fas fa-cog"></i>
                         <span>Settings</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help Center</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                        <span class="new-badge">Soon</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-file-contract"></i>
+                        <span>Terms</span>
+                    </a>
+                </li>
             </ul>
-        </nav>
+        </div>
     </aside>
 
     <div class="main-content">
@@ -361,6 +454,32 @@
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Search...">
             </div>
+
+            <div class="middle-actions">
+                <div class="level-info">
+                    <div class="action-item">
+                        <div class="icon">
+                            <i class="fas fa-level-up-alt"></i>
+                        </div>
+                        <div class="value">Regular +</div>
+                    </div>
+                    <div class="action-item">
+                        <div class="icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="value">100%</div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="icon">
+                            <i class="fas fa-thumbs-up"></i>
+                        </div>
+                        <div class="value">Rating</div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="user-actions">
                 <a href="#" title="Notifications"><i class="fas fa-bell"></i></a>
                 <a href="#" title="Messages"><i class="fas fa-envelope"></i></a>
@@ -374,7 +493,7 @@
                     <h2>Welcome, {{ Auth::user()->name }}!</h2>
                     <p>Here you can manage your assignments, view bids, and handle payments.</p>
                 </div>
-                <a href="/subscriptions/plans" class="btn-subscription"
+                <a href="/employer/subscriptions/plans" class="btn-subscription"
                     style="display: flex; align-items: center; text-decoration: none; color: var(--white); background-color: var(--green); padding: 0.5rem 1rem; border-radius: 0.5rem;">
                     <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
                     Subscription
@@ -383,7 +502,6 @@
 
             @yield('content')
         </main>
-
 
         <footer class="footer">
             © <span id="currentYear"></span> Uvo Writers. All rights reserved. | Developed by <a
@@ -396,11 +514,16 @@
     </div>
 
     <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropdownMenu = this.nextElementSibling;
+                    dropdownMenu.classList.toggle('active');
+                });
+            });
         });
     </script>
 </body>
