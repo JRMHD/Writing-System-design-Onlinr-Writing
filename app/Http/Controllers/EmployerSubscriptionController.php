@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\EmployerSubscription;
 use App\Models\Employer;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EmployerSubscriptionController extends Controller
 {
@@ -18,7 +20,9 @@ class EmployerSubscriptionController extends Controller
             ['name' => 'Monthly Plan', 'price' => 1000, 'duration' => '1 month'],
         ];
 
-        return view('employer.subscriptions.plans', compact('plans'));
+        $wallet = Wallet::firstOrCreate(['employer_id' => auth()->id()]);
+
+        return view('employer.subscriptions.plans', compact('plans', 'wallet'));
     }
 
     // Subscribe to a plan
@@ -28,18 +32,48 @@ class EmployerSubscriptionController extends Controller
         $price = $request->input('price');
         $duration = $request->input('duration');
 
-        $startDate = Carbon::now();
-        $endDate = Carbon::now()->add($duration);
+        $wallet = Wallet::where('employer_id', auth()->id())->first();
 
-        $subscription = new EmployerSubscription();
-        $subscription->employer_id = auth()->id(); // Assuming employer is authenticated
-        $subscription->plan_name = $planName;
-        $subscription->price = $price;
-        $subscription->start_date = $startDate;
-        $subscription->end_date = $endDate;
-        $subscription->save();
+        if (!$wallet || $wallet->balance < $price) {
+            return redirect()->route('employer.subscriptions.plans')->with('error', 'Insufficient balance. Please add funds to your wallet.');
+        }
 
-        return redirect()->route('employer.subscriptions.active')->with('success', 'Subscription successful!');
+        DB::beginTransaction();
+
+        try {
+            $startDate = Carbon::now();
+            $endDate = Carbon::now()->add($duration);
+
+            $existingSubscription = EmployerSubscription::where('employer_id', auth()->id())
+                ->where('end_date', '>', now())
+                ->first();
+
+            if ($existingSubscription) {
+                // Update existing subscription
+                $existingSubscription->end_date = $endDate;
+                $existingSubscription->save();
+            } else {
+                // Create new subscription
+                $subscription = new EmployerSubscription();
+                $subscription->employer_id = auth()->id();
+                $subscription->plan_name = $planName;
+                $subscription->price = $price;
+                $subscription->start_date = $startDate;
+                $subscription->end_date = $endDate;
+                $subscription->save();
+            }
+
+            // Deduct the price from the wallet
+            $wallet->balance -= $price;
+            $wallet->save();
+
+            DB::commit();
+
+            return redirect()->route('employer.subscriptions.active')->with('success', 'Subscription successful!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('employer.subscriptions.plans')->with('error', 'An error occurred. Please try again.');
+        }
     }
 
     // Show active subscriptions for the employer

@@ -16,9 +16,9 @@
         }
 
         h1 {
-            font-size: 34px;
-            font-weight: 600;
-            color: #14a800;
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
             text-align: center;
             margin-bottom: 40px;
         }
@@ -32,90 +32,112 @@
 
         .plan-card {
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
             width: 300px;
             transition: all 0.3s ease;
         }
 
         .plan-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .plan-name {
-            font-size: 25px;
-            font-weight: 600;
+            font-size: 28px;
+            font-weight: 700;
             color: #14a800;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .plan-price {
-            font-size: 20px;
-            font-weight: 500;
+            font-size: 24px;
+            font-weight: 600;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .benefits-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
             color: #14a800;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .benefits-list {
             list-style: none;
             padding: 0;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .benefits-list li {
-            font-size: 15px;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
         }
 
         .benefits-list li i {
             color: #14a800;
-            margin-right: 10px;
+            margin-right: 12px;
+            font-size: 18px;
         }
 
         .subscribe-btn {
             background-color: #14a800;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 500;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             width: 100%;
+            text-transform: uppercase;
         }
 
         .subscribe-btn:hover {
             background-color: #108700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(20, 168, 0, 0.3);
+        }
+
+        .user-info {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .user-balance {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
         }
 
         .active-subscriptions-link {
             display: inline-block;
             background-color: #1f57c3;
             color: white;
-            padding: 12px 24px;
+            padding: 14px 28px;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 16px;
-            font-weight: 500;
-            margin-top: 40px;
-            transition: background-color 0.3s ease;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         .active-subscriptions-link:hover {
             background-color: #1a4ba8;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(31, 87, 195, 0.3);
         }
 
         /* Modal styles */
@@ -134,58 +156,94 @@
         .modal-content {
             background-color: #fff;
             margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            border-radius: 12px;
+            padding: 40px;
+            border-radius: 16px;
             width: 400px;
             text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .modal-header {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        .modal-input {
-            width: 100%;
-            padding: 10px;
+        #confirmationMessage {
             font-size: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
-        .close-btn {
-            background-color: #ccc;
-            color: white;
-            border: none;
+        .modal-btn {
             padding: 12px 24px;
             font-size: 16px;
+            font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         .submit-btn {
             background-color: #14a800;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         .submit-btn:hover {
             background-color: #108700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(20, 168, 0, 0.3);
+        }
+
+        .close-btn {
+            background-color: #f0f2f5;
+            color: #333;
+            border: none;
+            margin-left: 10px;
+        }
+
+        .close-btn:hover {
+            background-color: #e0e2e5;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 
     <div class="container">
         <h1>Choose Your Subscription Plan</h1>
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="plans-container">
             @foreach ($plans as $plan)
@@ -200,45 +258,50 @@
                         <li><i class="fas fa-envelope"></i> Email Notifications</li>
                     </ul>
                     <button class="subscribe-btn"
-                        onclick="openModal('{{ $plan['name'] }}', {{ $plan['price'] }}, '{{ $plan['duration'] }}')">Subscribe</button>
+                        onclick="confirmSubscription('{{ $plan['name'] }}', {{ $plan['price'] }}, '{{ $plan['duration'] }}')">Subscribe</button>
                 </div>
             @endforeach
         </div>
 
-        <div style="text-align: center;">
+        <div class="user-info">
+            {{-- <p class="user-balance">Your current balance: KES {{ $balance }}</p> --}}
             <a href="{{ route('subscriptions.active') }}" class="active-subscriptions-link">
                 <i class="fas fa-list-ul"></i> Active Subscriptions
             </a>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="phoneModal" class="modal">
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">Enter Mpesa Phone Number</div>
+            <div class="modal-header">Confirm Subscription</div>
+            <p id="confirmationMessage"></p>
             <form id="subscriptionForm" action="{{ route('subscriptions.subscribe') }}" method="POST">
                 @csrf
                 <input type="hidden" name="plan" id="planInput">
                 <input type="hidden" name="price" id="priceInput">
                 <input type="hidden" name="duration" id="durationInput">
-                <input type="tel" name="phone" id="phoneInput" class="modal-input" placeholder="07XX XXX XXX"
-                    required>
-                <button type="submit" class="submit-btn">Subscribe</button>
+                <button type="submit" class="modal-btn submit-btn">Confirm Subscription</button>
             </form>
-            <button class="close-btn" onclick="closeModal()">Close</button>
+            <button class="modal-btn close-btn" onclick="closeModal()">Cancel</button>
         </div>
     </div>
 
     <script>
-        function openModal(plan, price, duration) {
+        function confirmSubscription(plan, price, duration) {
             document.getElementById('planInput').value = plan;
             document.getElementById('priceInput').value = price;
             document.getElementById('durationInput').value = duration;
-            document.getElementById('phoneModal').style.display = 'block';
+
+            let message =
+                `You are about to subscribe to the ${plan} Plan for KES ${price}. This amount will be deducted from your balance. Do you want to proceed?`;
+            document.getElementById('confirmationMessage').textContent = message;
+
+            document.getElementById('confirmationModal').style.display = 'block';
         }
 
         function closeModal() {
-            document.getElementById('phoneModal').style.display = 'none';
+            document.getElementById('confirmationModal').style.display = 'none';
         }
     </script>
 @endsection

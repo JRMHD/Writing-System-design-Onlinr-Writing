@@ -313,6 +313,31 @@
             padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        .subscription-notification {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscription-notification a {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .subscription-notification a:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -499,7 +524,16 @@
                     Subscription
                 </a>
             </div>
+            @php
+                $hasActiveSubscription = Auth::user()->subscriptions()->where('end_date', '>', now())->exists();
+            @endphp
 
+            @if (!$hasActiveSubscription)
+                <div class="subscription-notification">
+                    <span>You don't have an active subscription. Subscribe now to access all features!</span>
+                    <a href="{{ route('employer.subscriptions.plans') }}">Subscribe Now</a>
+                </div>
+            @endif
             @yield('content')
         </main>
 

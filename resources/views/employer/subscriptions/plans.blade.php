@@ -2,7 +2,6 @@
 
 @section('content')
     <style>
-        /* Existing styles */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f0f2f5;
@@ -107,7 +106,6 @@
             background-color: #108700;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -124,7 +122,6 @@
             background-color: #fff;
             margin: 15% auto;
             padding: 20px;
-            border: 1px solid #888;
             border-radius: 12px;
             width: 400px;
             text-align: center;
@@ -137,30 +134,37 @@
             margin-bottom: 20px;
         }
 
-        .modal-input {
-            width: 100%;
-            padding: 10px;
+        #confirmationMessage {
             font-size: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
-        .close-btn {
-            background-color: #ccc;
-            color: white;
-            border: none;
+        .modal-btn {
             padding: 12px 24px;
             font-size: 16px;
+            font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         .submit-btn {
             background-color: #14a800;
             color: white;
             border: none;
+        }
+
+        .submit-btn:hover {
+            background-color: #108700;
+        }
+
+        .close-btn {
+            background-color: #ccc;
+            color: #333;
+            border: none;
             padding: 12px 24px;
             font-size: 16px;
             border-radius: 50px;
@@ -168,18 +172,34 @@
             transition: background-color 0.3s ease;
         }
 
-        .submit-btn:hover {
-            background-color: #108700;
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 
     <div class="container">
         <h1>Available Subscription Plans</h1>
+        {{-- <p>Your current wallet balance: KES {{ $wallet->balance }}</p> --}}
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="plans-container">
             @foreach ($plans as $plan)
                 <div class="plan-card">
-                    <h2 class="plan-name">{{ $plan['name'] }} </h2>
+                    <h2 class="plan-name">{{ $plan['name'] }}</h2>
                     <p class="plan-price">KES {{ $plan['price'] }} / {{ $plan['duration'] }}</p>
                     <h3 class="benefits-title">Benefits</h3>
                     <ul class="benefits-list">
@@ -189,7 +209,7 @@
                         <li><i class="fas fa-envelope"></i> Email Notifications</li>
                     </ul>
                     <button class="subscribe-btn"
-                        onclick="openModal('{{ $plan['name'] }}', {{ $plan['price'] }}, '{{ $plan['duration'] }}')">Subscribe</button>
+                        onclick="confirmSubscription('{{ $plan['name'] }}', {{ $plan['price'] }}, '{{ $plan['duration'] }}')">Subscribe</button>
                 </div>
             @endforeach
         </div>
@@ -201,33 +221,37 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="phoneModal" class="modal">
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">Enter Mpesa Phone Number</div>
+            <div class="modal-header">Confirm Subscription</div>
+            <p id="confirmationMessage"></p>
             <form id="subscriptionForm" action="{{ route('employer.subscriptions.subscribe') }}" method="POST">
                 @csrf
                 <input type="hidden" name="plan" id="planInput">
                 <input type="hidden" name="price" id="priceInput">
                 <input type="hidden" name="duration" id="durationInput">
-                <input type="tel" name="phone" id="phoneInput" class="modal-input" placeholder="07XX XXX XXX"
-                    required>
-                <button type="submit" class="submit-btn">Subscribe</button>
+                <button type="submit" class="modal-btn submit-btn">Confirm Subscription</button>
             </form>
-            <button class="close-btn" onclick="closeModal()">Close</button>
+            <button class="modal-btn close-btn" onclick="closeModal()">Cancel</button>
         </div>
     </div>
 
     <script>
-        function openModal(plan, price, duration) {
+        function confirmSubscription(plan, price, duration) {
             document.getElementById('planInput').value = plan;
             document.getElementById('priceInput').value = price;
             document.getElementById('durationInput').value = duration;
-            document.getElementById('phoneModal').style.display = 'block';
+
+            let message =
+                `You are about to subscribe to the ${plan} Plan for KES ${price}. This amount will be deducted from your wallet balance. Do you want to proceed?`;
+            document.getElementById('confirmationMessage').textContent = message;
+
+            document.getElementById('confirmationModal').style.display = 'block';
         }
 
         function closeModal() {
-            document.getElementById('phoneModal').style.display = 'none';
+            document.getElementById('confirmationModal').style.display = 'none';
         }
     </script>
 @endsection

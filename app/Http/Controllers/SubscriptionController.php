@@ -6,10 +6,10 @@ use App\Models\Subscription;
 use App\Models\Writer;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
-    // Show available subscription plans
     public function showPlans()
     {
         $plans = [
@@ -18,42 +18,78 @@ class SubscriptionController extends Controller
             ['name' => 'Monthly Plan', 'price' => 500, 'duration' => '1 month'],
         ];
 
-        return view('subscriptions.plans', compact('plans'));
+        $writer = Writer::find(auth()->id());
+        $balance = $writer->balance;
+
+        return view('subscriptions.plans', compact('plans', 'balance'));
     }
 
-    // Subscribe to a plan
     public function subscribe(Request $request)
     {
         $request->validate([
             'plan' => 'required|string',
             'price' => 'required|numeric',
             'duration' => 'required|string',
-            'phone' => 'required|string|max:15'  // Validate phone number
         ]);
 
         $planName = $request->input('plan');
         $price = $request->input('price');
         $duration = $request->input('duration');
-        $phone = $request->input('phone');  // Capture phone number
 
-        // Handle date calculation
-        $startDate = Carbon::now();
-        $endDate = Carbon::now()->add(str_replace(' ', '', $duration));  // Add duration to current date
+        $writer = Writer::find(auth()->id());
 
-        // Create new subscription
-        $subscription = new Subscription();
-        $subscription->writer_id = auth()->id();
-        $subscription->plan_name = $planName;
-        $subscription->price = $price;
-        $subscription->phone = $phone;  // Store phone number
-        $subscription->start_date = $startDate;
-        $subscription->end_date = $endDate;
-        $subscription->save();
+        // Check if the writer has sufficient balance
+        if ($writer->balance < $price) {
+            return redirect()->back()->with('error', 'Insufficient balance for this subscription.');
+        }
 
-        return redirect()->route('subscriptions.active')->with('success', 'Subscription successful!');
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+            // Deduct the price from the writer's balance
+            $writer->decrement('balance', $price);
+
+            // Handle date calculation
+            $startDate = Carbon::now();
+            $endDate = Carbon::now()->add(str_replace(' ', '', $duration));
+
+            // Check if there's an existing active subscription
+            $existingSubscription = $writer->subscriptions()
+                ->where('end_date', '>', now())
+                ->latest()
+                ->first();
+
+            if ($existingSubscription) {
+                // Update existing subscription
+                $existingSubscription->update([
+                    'plan_name' => $planName,
+                    'price' => $price,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                ]);
+                $subscription = $existingSubscription;
+            } else {
+                // Create new subscription
+                $subscription = new Subscription([
+                    'writer_id' => $writer->id,
+                    'plan_name' => $planName,
+                    'price' => $price,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                ]);
+                $subscription->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('subscriptions.active')->with('success', 'Subscription successful!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while processing your subscription. Please try again.');
+        }
     }
 
-    // Show active subscriptions
     public function activeSubscriptions()
     {
         $writer = Writer::find(auth()->id());

@@ -383,6 +383,31 @@
         .action-item .toggle-balance.hidden {
             color: var(--deep-orange);
         }
+
+        .subscription-notification {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscription-notification a {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .subscription-notification a:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -520,7 +545,16 @@
                     Subscription
                 </a>
             </div>
+            @php
+                $hasActiveSubscription = Auth::user()->subscriptions()->where('end_date', '>', now())->exists();
+            @endphp
 
+            @if (!$hasActiveSubscription)
+                <div class="subscription-notification">
+                    <span>You don't have an active subscription. Subscribe now to access all features!</span>
+                    <a href="{{ route('subscriptions.plans') }}">Subscribe Now</a>
+                </div>
+            @endif
             @if (isset($writer) && $writer->profile_completion < 70)
                 <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;">
                     <p>Your profile is incomplete. Please <a href="{{ route('writer.profile') }}">complete your
