@@ -231,3 +231,19 @@ Route::post('/employer/process-payment', [EmployerAuthController::class, 'proces
 Route::middleware(['auth:employer'])->group(function () {
     Route::get('/employer/dashboard', [DashboardController::class, 'index'])->name('employer.dashboard');
 });
+
+// For Employers
+Route::middleware(['auth:employer'])->group(function () {
+    Route::get('/employer/chats', [MessageController::class, 'indexForEmployer'])->name('employer.chat.index');
+    Route::post('/employer/chats/start', [MessageController::class, 'startChatForEmployer'])->name('employer.chat.start');
+    Route::get('/employer/chats/{conversation}', [MessageController::class, 'showForEmployer'])->name('employer.chat.show');
+    Route::post('/employer/chats/{conversation}/send', [MessageController::class, 'sendForEmployer'])->name('employer.chat.send');
+});
+
+// For Writers
+Route::middleware(['auth:writer'])->group(function () {
+    Route::get('/writer/chats', [MessageController::class, 'indexForWriter'])->name('writer.chat.index');
+    Route::post('/writer/chats/start', [MessageController::class, 'startChatForWriter'])->name('writer.chat.start');
+    Route::get('/writer/chats/{conversation}', [MessageController::class, 'showForWriter'])->name('writer.chat.show');
+    Route::post('/writer/chats/{conversation}/send', [MessageController::class, 'sendForWriter'])->name('writer.chat.send');
+});

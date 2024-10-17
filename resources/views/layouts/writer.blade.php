@@ -444,9 +444,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/writer/chats" class="nav-link">
                         <i class="fas fa-comments"></i>
-                        <span>Messages</span>
+                        <span>Charts</span>
                     </a>
                 </li>
                 <li class="nav-item">
